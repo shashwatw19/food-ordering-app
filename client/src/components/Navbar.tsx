@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import { Menubar, MenubarMenu, MenubarTrigger, MenubarContent } from "./ui/menubar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { MenubarItem, Separator } from "@radix-ui/react-menubar"
-import { Sun, Moon, ShoppingCart,  Loader2, Menu, User, HandPlatter, MenuIcon, Hotel, ForkKnifeCrossed, SquareMenu, PackageCheck } from "lucide-react"
+import { Sun, Moon, ShoppingCart,  Loader2, Menu, User, HandPlatter, ForkKnifeCrossed, SquareMenu, PackageCheck } from "lucide-react"
 import { Button } from "./ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import {
