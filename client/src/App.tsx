@@ -4,35 +4,45 @@ import Signup from "./auth/Signup"
 import ForgotPassword from "./auth/ForgotPassword"
 import ResetPassword from "./auth/ResetPassword"
 import VerifyEmail from "./auth/VerifyEmail"
-import Navbar from "./components/Navbar"
+import MainLayout from "./layout/MainLayout"
+import HeroSection from "./components/HeroSection"
+import Profile from "./components/Profile"
 function App() {
   const appRouter = createBrowserRouter([
     {
-    path : "/",
-    element : <Navbar/>
+      path: "/",
+      element: <MainLayout />,
+      children: [{
+        path: '/',
+        element: <HeroSection />,
+      },
+      {
+        path: '/profile',
+        element: <Profile />
+      }]
     },
     {
-      path : "/login",
-      element : <Login/>
+      path: "/login",
+      element: <Login />
     },
     {
-      path : "/signup",
-      element : <Signup/>
+      path: "/signup",
+      element: <Signup />
     },
     {
-      path : "/forgot-password",
-      element :  <ForgotPassword/>
+      path: "/forgot-password",
+      element: <ForgotPassword />
     },
     {
-      path : "/reset-password",
-      element : <ResetPassword/>
+      path: "/reset-password",
+      element: <ResetPassword />
     },
     {
-      path : "/verify",
-      element : <VerifyEmail/>
+      path: "/verify",
+      element: <VerifyEmail />
     }
-  
-  ])  
+
+  ])
 
   return (
     <>
