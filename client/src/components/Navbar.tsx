@@ -26,7 +26,7 @@ const Navbar = () => {
 
                 <div className="flex flex-row gap-2 items-center justify-around  p-3">
                     <div className="hidden md:flex items-center gap-4">
-                        <Link to={"/home"}>Home</Link>
+                        <Link to={"/"}>Home</Link>
                         <Link to={"/profile"}>Profile</Link>
                         <Link to={"/order/status"}>Order</Link>
                         {
@@ -89,10 +89,11 @@ const Navbar = () => {
                         </Avatar>
 
                         <div>
-                            {
+                            {/* {
                                 loading ? <button className="bg-orange-500 hover:bg-orange-400 rounded-md  text-white  font-semibold p-2 ">Logout</button> :
                                     <button className="bg-orange-400 test-white font-semibold text-white  text-sm flex  flex-row justify-center gap-2 items-center p-2 rounded-md"><Loader2 className="text-white text-xs animate-spin" />Logging out</button>
-                            }
+                            } */}
+                            <button className=" text-gray-700 bg-gray-50 rounded-md font-medium px-2 py-1 ">logout</button>
 
                         </div>
                         {/* <button onClick={() => setLoading(!loading)}>logout</button> */}

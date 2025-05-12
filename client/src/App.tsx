@@ -7,6 +7,7 @@ import VerifyEmail from "./auth/VerifyEmail"
 import MainLayout from "./layout/MainLayout"
 import HeroSection from "./components/HeroSection"
 import Profile from "./components/Profile"
+import SearchPage from "./components/SearchPage"
 function App() {
   const appRouter = createBrowserRouter([
     {
@@ -19,7 +20,12 @@ function App() {
       {
         path: '/profile',
         element: <Profile />
-      }]
+      },
+      {
+        path : '/search/:result',
+        element : <SearchPage/>
+      }
+      ]
     },
     {
       path: "/login",

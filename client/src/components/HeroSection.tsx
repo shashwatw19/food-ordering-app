@@ -2,10 +2,14 @@ import {  Search } from "lucide-react"
 import { Input } from "./ui/input"
 import pizza from "../assets/pizza.avif"
 import React from "react"
+import { useNavigate } from "react-router-dom"
 
 const HeroSection = () => {
-    const [country , setCountry] = React.useState<string>("")
-   
+    const [searchResults , setSearchResults] = React.useState<string>("");
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchResults(e.target.value);
+    }
+    const navigate = useNavigate()
   return (
     <div className="flex flex-col md:flex-row max-w-7xl mx-auto md:p-10 p-5 justify-center md:gap-10 md:mt-5.5 gap-5">
         <div className="flex flex-col gap-6 md:w-[50%] w-full">
@@ -15,10 +19,10 @@ const HeroSection = () => {
             </div>
             <div className="flex flex-row gap-2">
                 <div  className="relative w-full">
-                    <Input placeholder="Enter you country" className="pl-10  rounded-md shadow-lg  text-gray-600 " type="text" value={country }  onChange={(e : React.ChangeEvent<HTMLInputElement>) => setCountry(e.target.value)}/>
+                    <Input placeholder="Search restaurants by name,city and country" className="pl-10  rounded-md shadow-lg text-gray-600 text-xl" type="text" value={searchResults }  onChange={handleSearch}/>
                     <Search className="absolute inset-y-2 left-2 text-gray-600"/>
                 </div>
-                <button className="bg-orange-500 hover:bg-orange-400 text-white font-semibold p-2 rounded-md ">Search</button>
+                <button onClick={()=>navigate( `/search/${searchResults}`)} className="bg-orange-500 hover:bg-orange-400 text-white font-semibold px-2 py-1 rounded-md ">Search</button>
                 
             </div>
           
