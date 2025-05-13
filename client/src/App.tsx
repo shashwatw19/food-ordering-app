@@ -9,6 +9,7 @@ import HeroSection from "./components/HeroSection"
 import Profile from "./components/Profile"
 import SearchPage from "./components/SearchPage"
 import Restaurant from "./components/Restaurant"
+import Cart from "./components/Cart"
 function App() {
   const appRouter = createBrowserRouter([
     {
@@ -29,6 +30,10 @@ function App() {
       {
         path : '/restaurant/:id',
         element : <Restaurant/>
+      },
+      {
+        path : '/cart',
+        element : <Cart/>
       }
       ]
     },
