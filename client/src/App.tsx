@@ -12,6 +12,8 @@ import Restaurant from "./components/Restaurant"
 import Cart from "./components/Cart"
 import RestaurantOwer from "./components/admin/RestaurantOwer"
 import AddMenu from "./components/admin/AddMenu"
+import Orders from "./components/admin/Orders"
+import Success from "./components/Success"
 function App() {
   const appRouter = createBrowserRouter([
     {
@@ -37,6 +39,10 @@ function App() {
         path : '/cart',
         element : <Cart/>
       },
+      {
+        path : '/order/success',
+        element : <Success/>
+      },
       // admin functions start here
       {
         path : '/admin/restaurant',
@@ -45,6 +51,9 @@ function App() {
       {
          path : '/admin/addMenu',
         element : <AddMenu/>
+      },{
+        path : '/admin/order',
+        element : <Orders/>
       }
       ]
     },

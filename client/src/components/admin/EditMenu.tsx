@@ -75,7 +75,7 @@ const EditMenu = ({ selected, setSelected }: { selected: boolean, setSelected: D
                         </div>
                         <div className='p-2 flex items-center w-full justify-center'>
                             <DialogFooter>
-                                <button type='submit' className='bg-orange-500  text-white px-3 py-2 font-semibold mt-2 rounded-md '>Edit</button>
+                                <button type='submit' className='bg-orange-500  text-white px-3 py-2 font-semibold mt-2 rounded-md '>Confirm</button>
                             </DialogFooter>
                         </div>
                     </form>
