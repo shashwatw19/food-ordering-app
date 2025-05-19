@@ -17,5 +17,5 @@ app.use(cookieParser())
 
 app.get('/' , (req ,res )=>{res.send('Heelo mf!!')})
 
-
+console.log(process.env.ACCESS_TOKEN_EXPIRY)
 export {app}

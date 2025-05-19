@@ -7,7 +7,7 @@ dotenv.config()
 export interface IUser extends Document {
   fullname: string;
   email: string;
-  password: string;
+  password: string | undefined;
   address: string;
   city: string;
   contact: number;
@@ -17,6 +17,9 @@ export interface IUser extends Document {
   resetPasswordToken?: string;
   verificationToken?: string;
   refreshToken?: string;
+  matchPassword : (password : string)=>Promise<Boolean>,
+ generateAccessToken : () => Promise<string>,
+ generateRefreshToken : ()=>Promise<string>
 }
 
 const userSchema = new mongoose.Schema<IUser>(
@@ -58,14 +61,17 @@ const userSchema = new mongoose.Schema<IUser>(
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
-
-  const hashedPassword = bcrypt.hashSync(this.password, 10);
-  console.log("hashed Passwrod :", hashedPassword);
-  this.password = hashedPassword;
-  next();
+  
+  else if(this.password != undefined){
+     const hashedPassword = bcrypt.hashSync(this.password, 10);
+    console.log("hashed Passwrod :", hashedPassword);
+    this.password = hashedPassword;
+    next();
+  }
+ 
 });
 
-userSchema.methods.matchPassword = async function (password: string) {
+userSchema.methods.matchPassword = async function (password: string)  {
   if (!password || !this.password)
     return new Error("password and hashedPassword are required");
 
@@ -74,22 +80,44 @@ userSchema.methods.matchPassword = async function (password: string) {
 
 userSchema.methods.generateAccessToken = async function(): Promise<string> {
   try {
+    const payload : { _id : string , email  : string , fullname : string}= {
+      _id: this._id,
+      email : this.email,
+      fullname : this.fullname
+    };
+    
+    const secret  = process.env.REFRESH_TOKEN_SECRET ;
+   
+    if (!secret){
+      throw new Error('REFRESH_TOKEN_SECRET is not defined');
+    }
+    
+    return jwt.sign(payload, secret, { expiresIn: '7d' });
+  
+
+  } catch (error) {
+    throw new Error('Error while generating REFRESH_TOKEN');
+  }
+};
+
+userSchema.methods.generateRefreshToken = async function() : Promise<string>{
+  try {
     const payload : { _id : string}= {
       _id: this._id
     };
     
-    const secret = process.env.ACCESS_TOKEN_SECRET;
-    const expiry = process.env.ACCESS_TOKEN_EXPIRY;
-    
-    if (!secret || !expiry) {
-      throw new Error('ACCESS_TOKEN_SECRET or ACCESS_TOKEN_EXPIRY is not defined');
+    const secret  = process.env.ACCESS_TOKEN_SECRET ;
+   
+    if (!secret){
+      throw new Error('ACCESS_TOKEN_SECRET is not defined');
     }
     
-    const token = jwt.sign(payload, secret, { expiresIn: expiry });
-    return token;
+      return  jwt.sign( payload, secret, { expiresIn: '1d' });
+   
+
   } catch (error) {
     throw new Error('Error while generating access token');
-  }
-};
+  }   
+}
 
 export const User: Model<IUser> = mongoose.model<IUser>("User", userSchema);

@@ -5,7 +5,27 @@ import { ApiResponse } from "../utils/ApiResponse";
 import { asyncHandler } from "../utils/asyncHandler";
 import { Request } from "express";
 import { Response } from "express";
-// signup
+
+export type tokenType = {
+    verificationToken : string,
+    refreshToken : string
+}
+const generateAccessAndRefreshToken = async(userId : unknown) : Promise<tokenType> =>{
+    const user = await User.findById(userId);
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
+    const verificationToken = await user.generateAccessToken()
+    const refreshToken = await user.generateRefreshToken()
+    
+    user.verificationToken = verificationToken
+    user.refreshToken = refreshToken
+    
+    await user.save({validateBeforeSave : false})
+
+    return {verificationToken , refreshToken}
+} 
+//signup
 const signup = asyncHandler(async(req : Request , res : Response)=>{
     const {fullname , email , password , contact , otp} = req.body;
     if([fullname , email , password , contact , otp].some(field => field?.trim() === ""))
@@ -35,7 +55,7 @@ const signup = asyncHandler(async(req : Request , res : Response)=>{
         new ApiResponse(200 , 'User created successfully ' , {createdUser})
     )
 })
-// login
+//login
 const login = asyncHandler(async(req : Request, res : Response)=>{
     const {email , password} = req.body;
 
@@ -43,13 +63,34 @@ const login = asyncHandler(async(req : Request, res : Response)=>{
         throw new ApiError(404 , 'all fields are required');
 
     const validUser = await User.findOne({
-        $or : [{email , password}]
+        $or : [{email} , {password}]
     })
     if(!validUser)
         throw new ApiError(401 , 'invalid User');
 
     const isPasswordMatched = await validUser.matchPassword(password)
     
+    if(!isPasswordMatched)
+        throw new ApiError(401 , 'inValid Password')
+
+    const {verificationToken ,refreshToken} = await generateAccessAndRefreshToken(validUser?._id);
+
+     const options = {
+        httpOnly : true,
+        secure : true
+    }
+
+    validUser.refreshToken = undefined
+    validUser.verificationToken = undefined
+    validUser.password = undefined
+
+    return res.status(201)
+    .cookie('accessToken' , verificationToken, options)
+    .cookie('refreshToken' , refreshToken , options)
+    .json(
+        new ApiResponse(200 , 'User loggedIn Succesfully' , validUser)
+    )
+
 
 })
 
@@ -74,3 +115,5 @@ const login = asyncHandler(async(req : Request, res : Response)=>{
 // resetPassword
 // checkAuth
 // updateProfile
+
+export {signup , login}
