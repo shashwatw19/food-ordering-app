@@ -21,7 +21,7 @@ export interface IOrder extends Document {
   cartDetails: CartDetails;
   totalAmount: number;
   status:
-    | "pending"
+     "pending"
     | "confirmed"
     | "preparing"
     | "outfordelivery"

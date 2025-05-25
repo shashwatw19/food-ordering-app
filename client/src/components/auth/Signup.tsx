@@ -1,10 +1,12 @@
-import {  Mail, Phone, User } from "lucide-react";
-import { LockKeyhole, Loader2 } from "lucide-react";
+import {  Loader2, Mail, Phone, User } from "lucide-react";
+import { LockKeyhole } from "lucide-react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, } from "react-router-dom";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { SignupInputState , userSignupSchema } from "../schema/userSchema";
+import { useUserStore } from "../store/useUserStore";
+import { useNavigate } from "react-router-dom";
 const Signup = () => {
     const [input , setInput] = useState<SignupInputState>({
         email: "",
@@ -12,13 +14,16 @@ const Signup = () => {
         fullname : "",
         contact : ""
     })
+    const navigate = useNavigate()
     const [error , setError] = useState<Partial<SignupInputState>>({})
-
+    const loading = useUserStore((state)=>state.loading)
+    const setFormData = useUserStore((state)=>state.setFormData)
+    const createOtp = useUserStore((state)=>state.createOtp)
     const changeHandler = (e : ChangeEvent<HTMLInputElement>)=>{
         const{name , value} = e.target
         setInput({...input , [name] : value})
     }
-    const submitHandler = (e : FormEvent)=>{
+    const submitHandler = async(e : FormEvent)=>{
         e.preventDefault()
         const result = userSignupSchema.safeParse(input);
         if(!result.success){
@@ -27,18 +32,22 @@ const Signup = () => {
             return ;
         }
         
+        try{
+            await createOtp(input?.email);
+            setFormData(input)
+            navigate('/verify')
+        }catch(e){
+            console.log('errors' , e)
+        }
+        
         setError({
           email: "",
           password: "",
           fullname : "",
           contact : ""
         })
-
-        console.log(result)
-
-
-    }
-    const loading = 0
+}
+ 
     return (
         <div className="flex justify-center items-center h-screen w-screen">
             <form onSubmit={submitHandler} className="md:p-8 w-full max-w-md   border-gray-800 rounded-lg  flex flex-col gap-2">
@@ -71,8 +80,11 @@ const Signup = () => {
 
                 {error && <span className="text-sm text-red-500">{error.password}</span>}
 
-                {loading ? <Button disabled className="bg-orange-500 hover:bg-orange-400 duration-100 transition-all  w-full my-5 "><Loader2 className="mr-2 h-4 w-4 animate-spin" />Please Wait..</Button> : 
-                <Button type='submit'className="bg-orange-500 hover:bg-orange-400 w-full my-5 " >Login</Button>}
+                
+                {
+                    !loading ? <Button type='submit'className="bg-orange-500 hover:bg-orange-400 w-full my-5 text-white " >Signup</Button> :
+                     <Button disabled className="bg-orange-400 hover:bg-orange-400 w-full my-5 " ><Loader2 className="animate-spin"/>Please Wait..</Button>
+                }
 
                 <div className="mt-2 h-[1px] w-full bg-gray-400"></div>
 

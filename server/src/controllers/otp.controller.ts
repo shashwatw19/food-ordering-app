@@ -11,6 +11,9 @@ const createOtp = asyncHandler(async (req: Request, res: Response) => {
     if(!email)
         return new ApiError(404 , 'email not found' , [] , "")
     const otp = generateOtp();
+
+   
+
     const newOtp = await Otp.create({email , otp});
 
     if(!newOtp)

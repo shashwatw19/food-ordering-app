@@ -1,1 +1,1 @@
-export const DB_NAME = 'food-app-db'
+export const DB_NAME = 'restaurant'

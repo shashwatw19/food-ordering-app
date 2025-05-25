@@ -5,6 +5,7 @@ import { ApiResponse } from "../utils/ApiResponse";
 import { asyncHandler } from "../utils/asyncHandler";
 import { Request } from "express";
 import { Response } from "express";
+import {uploadImageOnCloudinary} from '../utils/cloudinary'
 
 export type tokenType = {
     verificationToken : string,
@@ -28,10 +29,12 @@ const generateAccessAndRefreshToken = async(userId : unknown) : Promise<tokenTyp
 //signup
 const signup = asyncHandler(async(req : Request , res : Response)=>{
     const {fullname , email , password , contact , otp} = req.body;
-    if([fullname , email , password , contact , otp].some(field => field?.trim() === ""))
+    console.log(req.body)
+    if([fullname , email , password].some((field) => field?.trim() === ""))
         throw new ApiError(400 , 'All fields are required' );
 
-   
+    if(contact?.length == 0 || otp?.length == 0)
+        throw new ApiError(400 , 'invalid length fields are not allowed')
     const existedUser = await User.findOne({email});
     if(existedUser)
         throw new ApiError(400 , 'User already registered ');
@@ -56,7 +59,7 @@ const signup = asyncHandler(async(req : Request , res : Response)=>{
     )
 })
 //login
-const login = asyncHandler(async(req : Request, res : Response)=>{
+const signin = asyncHandler(async(req : Request, res : Response)=>{
     const {email , password} = req.body;
 
     if([email , password].some(field=>field?.trim()===""))
@@ -68,12 +71,13 @@ const login = asyncHandler(async(req : Request, res : Response)=>{
     if(!validUser)
         throw new ApiError(401 , 'invalid User');
 
+   
     const isPasswordMatched = await validUser.matchPassword(password)
     
     if(!isPasswordMatched)
         throw new ApiError(401 , 'inValid Password')
 
-    const {verificationToken ,refreshToken} = await generateAccessAndRefreshToken(validUser?._id);
+    const {verificationToken ,refreshToken} = await generateAccessAndRefreshToken(validUser._id);
 
      const options = {
         httpOnly : true,
@@ -85,7 +89,7 @@ const login = asyncHandler(async(req : Request, res : Response)=>{
     validUser.password = undefined
 
     return res.status(201)
-    .cookie('accessToken' , verificationToken, options)
+    .cookie('verificationToken' , verificationToken, options)
     .cookie('refreshToken' , refreshToken , options)
     .json(
         new ApiResponse(200 , 'User loggedIn Succesfully' , validUser)
@@ -93,27 +97,90 @@ const login = asyncHandler(async(req : Request, res : Response)=>{
 
 
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// verifyEmail
 // forgotPassword
-// resetPassword
-// checkAuth
-// updateProfile
+const forgotPassword = asyncHandler(async(req : Request , res : Response)=>{
+    const {email} = req.body
 
-export {signup , login}
+    const validUser = await User.findOne({email})
+
+    if(!validUser)
+            throw new ApiError(404 , 'User not found' );
+
+    const resetToken = validUser.createResetPasswordToken()
+    console.log(resetToken)
+    if(resetToken?.trim() === "")
+        return new ApiError(402 , 'invalid resetToken')
+    
+    validUser.resetPasswordToken = resetToken
+
+    await validUser.save({ validateBeforeSave: false })
+
+    return res.status(201).json(
+        new ApiResponse(200 , 'reset token created successfully!')
+    )
+})
+// resetPassword
+const resetPassword = asyncHandler(async(req : Request , res : Response)=>{
+    const {token } = req.params
+    const {newPassword} = req.body
+
+    if(token?.trim() === "" )
+        throw new ApiError(404 , 'reset token not found')
+
+    const validUser = await User.findOne({resetPasswordToken : token})
+
+    if(!validUser)
+        throw new ApiError(404 , 'user with resetToken not found');
+
+    if( await validUser.matchPassword(newPassword))
+        throw new ApiError(401 , 'new password cant be same as old one')
+
+    validUser.password = newPassword
+    validUser.save({validateBeforeSave : false})
+
+    return res.status(200).json(
+        new ApiResponse(200 , ' password reset successfully!')
+    )
+
+})
+
+// updateProfile
+const updateProfile = asyncHandler(async(req : Request , res : Response)=>{
+    const _id = req.user?._id
+    console.log(_id , "USER IDs")
+    const user = await User.findById(_id);
+    
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
+    console.log('reached here...')
+    if(req.file && req.file.path) {
+      const response = await uploadImageOnCloudinary(req.file.path)
+      if(response?.trim() === "")
+        throw new ApiError(404 , 'image upload not possible')
+
+      user.avatarImage = response 
+    }
+
+    const { fullname, contact } = req.body;
+    if (fullname && fullname.trim() !== "") {
+        user.fullname = fullname;
+    }
+    if (contact && contact.trim() !== "") {
+        user.contact = contact;
+    }
+
+    // Handle avatarImage as a file upload
+    
+
+    await user.save({ validateBeforeSave: false });
+
+    const updatedUser = await User.findById(_id).select('-password -refreshToken');
+
+    return res.status(200).json(
+        new ApiResponse(200, "Profile updated successfully", { updatedUser })
+    );
+
+})
+
+export {signup , signin , forgotPassword ,  updateProfile , resetPassword}

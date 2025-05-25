@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
@@ -6,7 +6,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-    origin:   `${process.env.ORIGIN}`,
+    origin:  'http://localhost:5173',
     credentials : true
 }));
 
@@ -15,7 +15,25 @@ app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
-app.get('/' , (req ,res )=>{res.send('Heelo mf!!')})
 
-console.log(process.env.ACCESS_TOKEN_EXPIRY)
+app.get('/api/v1' , (req ,res )=>{res.send('Heelo mf!!')})
+
+import userRouter from '../src/routes/user.routes'
+import restaurantRouter from '../src/routes/restaurant.routes'
+import menuRouter from '../src/routes/menu.routes'
+
+app.use('/api/v1/user' , userRouter)
+app.use('/api/v1/restaurant' , restaurantRouter)
+app.use('/api/v1/menu' , menuRouter)
+
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    const statusCode = err.statusCode || 500;
+    
+    res.status(statusCode).json({
+        success: false,
+        message: err.message || "Internal Server Error",
+        errors: err.errors || [],
+        statusCode : statusCode
+    });
+});
 export {app}

@@ -22,6 +22,7 @@ const uploadImageOnCloudinary = async (localFilePath: string): Promise<string | 
         return response?.secure_url || null;
     } catch (e) {
         console.log(`error while uploading image`, e);
+        
         return null;
     }
 }

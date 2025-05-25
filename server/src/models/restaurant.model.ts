@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose ,{Schema , Types}from "mongoose";
 import { Document } from "mongoose";
 export interface IRestautrant extends Document {
   user: mongoose.Schema.Types.ObjectId;
@@ -6,8 +6,8 @@ export interface IRestautrant extends Document {
   city: string;
   deliveryTime: number;
   cuisines: string[];
-  imageUrl: string;
-  menu: mongoose.Schema.Types.ObjectId[];
+  imageUrl: string | null;
+  menu: Types.ObjectId[];
 }
 
 const restaurantSchema = new mongoose.Schema<IRestautrant>({
@@ -39,9 +39,9 @@ const restaurantSchema = new mongoose.Schema<IRestautrant>({
   },
   menu: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Menu",
-      required: true,
+      type: Schema.Types.ObjectId,
+      ref: 'Menu',
+     
     },
   ],
 },{timestamps : true});
