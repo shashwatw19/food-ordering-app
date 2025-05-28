@@ -1,32 +1,55 @@
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@radix-ui/react-dialog"
-import { ChangeEvent, FormEvent, useState } from "react"
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { Plus } from "lucide-react"
 import { DialogFooter, DialogHeader } from "../ui/dialog"
 import { Label } from "@radix-ui/react-menubar"
 import { Input } from "../ui/input"
 import { MenuFormSchema, menuFromSchema } from "../../schema/menuFormSchema"
-import pizza3 from "../../assets/pizzza3.jpg"
-import pizza2 from "../../assets/pizza2.jpg"
-import pizza from "../../assets/pizza.avif"
 import { Button } from "../ui/button"
 import EditMenu from "./EditMenu"
+import { useRestaurantStore } from "../../store/useRestaurantStore"
+import { useMenuStore } from "../../store/useMenuStore"
+import { MenuItem } from "../../types/restaurantType"
 const AddMenu = () => {
-    const [selected , setSelected ] = useState<boolean>(false)
+    const [selectedMenu , setSelectedMenu ] = useState<MenuItem>({
+        _id : "",
+        name : "",
+        description : "",
+        imageUrl : "",
+        price : 0
+    })
+  
+    const [editOpen , setEditOpen] = useState<boolean>(false)
     const [open, setOpen] = useState<boolean>(false)
     const [menu, setMenu] = useState<MenuFormSchema>({
         name: "",
         description: "",
         price: 0,
-        images: null
+        images: undefined
     })
-    console.log("selecteddd" , selected)
+    const [updateMenu , setUpdateMenu] = useState<boolean>(false)
+    const addMenu = useMenuStore((state)=>state.addMenu)
+    const getRestaurantMenu = useRestaurantStore((state)=>state.getRestaurantMenu)
+    const restaurant = useRestaurantStore((state)=>state.restaurant)
+    // console.log("restaurant from addMEnu " , restaurant)
     const [errors, setErrors] = useState<Partial<MenuFormSchema>>({})
 
     const changeEventHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value, type } = e.target
         setMenu({ ...menu, [name]: type == "number" ? Number(value) : value })
     }
-    const submitHandler = (e: FormEvent) => {
+    const handleEditMenu = ( menu : MenuItem)=>{
+        console.log("menu item selected " , menu)
+        setSelectedMenu({
+            name : menu.name,
+            description : menu.description,
+            _id : menu._id,
+            imageUrl : menu.imageUrl,
+            price : menu.price
+        })
+        setEditOpen(true)
+    }
+    const submitHandler = async(e: FormEvent) => {
         e.preventDefault()
         const result = menuFromSchema.safeParse(menu)
         if (!result.success) {
@@ -34,9 +57,41 @@ const AddMenu = () => {
             setErrors(fieldError as Partial<MenuFormSchema>)
         }
         // api implementation from here
+   
+       try{
+            const formdata = new FormData()
+            formdata.append("name" , menu.name)
+            formdata.append("description" , menu.description)
+            formdata.append("price" , menu.price.toString())
+            
+            if(menu?.images){
+                formdata.append("image" , menu.images)
+            }
+            
+            await addMenu(formdata)
+
+       }catch(e){   
+        console.log('error in addMenu component' , e)
+       }finally{
+        setMenu({
+             name: "",
+            description: "",
+            price: 0,
+            images: undefined
+        })
+        setOpen(false)
+       }
 
 
     }
+    
+    useEffect(()=>{
+        const findMenu = async()=>{
+            getRestaurantMenu()
+            setUpdateMenu(false)    
+        }
+        findMenu()    
+    },[updateMenu])
     return (
         <div className="max-w-6xl mx-auto flex flex-col gap-3  my-10 p-4 ">
             <div className="flex justify-between ">
@@ -60,7 +115,7 @@ const AddMenu = () => {
                             <div className='md:grid md:grid-cols-2 space-y-1 md:space-y-0 '>
                                 <div className='p-2 flex flex-col items-start gap-1 '>
                                     <Label className='text-gray-700 font-medium'>Item</Label>
-                                    <Input type="text" name='item' value={menu.name} onChange={changeEventHandler} />
+                                    <Input type="text" name='name' value={menu.name} onChange={changeEventHandler} />
                                     {
                                         errors && <span className="text-red-500 text-sm">{errors.name}</span>
                                     }
@@ -81,7 +136,7 @@ const AddMenu = () => {
                                 </div>
                                 <div className='p-2 flex flex-col items-start gap-1  '>
                                     <Label className='text-gray-700 font-medium'>contact</Label>
-                                    <Input type="file" name='image/*' onChange={(e) => setMenu({ ...menu, images: e.target.files ? e.target.files?.[0] : null })} />
+                                    <Input type="file" accept="image/*" name='image' onChange={(e) => setMenu({ ...menu, images: e.target.files ? e.target.files?.[0] : undefined })} />
                                     {
                                         errors?.images && <span className="text-red-500 text-sm">{errors.images?.name || "image file is required"}</span>
                                     }
@@ -98,23 +153,38 @@ const AddMenu = () => {
 
             </Dialog>
             {/* menu items starts here */}
-            <div className="mt-6 space-y-4 ">
-                <div className="flex flex-col md:flex-row md:items-center md:space-x-4 md:p-4 shadow-md rounded-lg border-1 border-gray-300">
-                    <img src={pizza3} className="md:h-24 md:w-24 h-16 w-full object-cover rounded-lg " />
-                    <div className="flex-1 p-2">
-                        <h1 className="text-lg font-semibold text-gray-800">Biryani</h1>
-                        <p className="text-gray-600 text-sm">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum, molestias
-                            dolor sit amet consectetur adipisicing elit. Eum, molestias.</p>
-                        <p className=" font-medium text-gray-800">Price : <span className="text-orange-500 ">₹80</span></p>
-                        <Button size={'sm'} onClick={()=>setSelected(!selected)} className="bg-orange-500 hover:bg-orange-400 text-white md:w-[12%] w-full font-semibold rounded-md mt-2 ">Edit</Button>
-                    </div>
+            {
+                restaurant?.menu?.length == 0 ? 
+                <p className="text-xl text-gray-600 font-medium mt-5">Your Restaurant Does't Have Any Menu. <span className="text-sm "></span></p> :
+                <div className="mt-6 space-y-4">
+                    {
+                        restaurant?.menu?.map((item)=>{
+                            return <div className="flex flex-col md:flex-row md:items-center md:space-x-4 md:p-4 shadow-md rounded-lg border-1 border-gray-300">
+                                        <img src={item?.imageUrl} alt="Image" className="md:h-24 md:w-24 h-16 w-full object-cover rounded-lg " />
+                                        <div className="flex-1 p-2">
+                                            <h1 className="text-lg font-semibold text-gray-800">{item?.name}</h1>
+                                            <p className="text-gray-600 text-sm">{item?.description}</p>
+                                            <p className=" font-medium text-gray-800">Price : <span className="text-orange-500 ">{item?.price.toString()}</span></p>
+                                            <Button size={'sm'} 
+                                            onClick={()=>{
+                                                            setEditOpen(true); 
+                                                            setSelectedMenu({_id : item._id , name : item.name , description : item.description , imageUrl : item.imageUrl , price : item.price})}} 
+                                                            className="bg-orange-500 hover:bg-orange-400 text-white md:w-[12%] w-full font-semibold rounded-md mt-2 ">Edit
+                                            </Button>
+                                        </div>
+                                    </div>
+                        })
+                    }
                 </div>
+            }
+            <div className="mt-6 space-y-4 ">
+                
 
 
 
                 {/* edit pop-up */}
                 <div>
-                     <EditMenu selected={selected} setSelected={setSelected}/>
+                  {editOpen && <EditMenu setUpdateMenu={setUpdateMenu} selectedMenu={selectedMenu}  setSelectedMenu={setSelectedMenu} editOpen={editOpen} setEditOpen = {setEditOpen}/>}   
                 </div>
             </div>
         </div>

@@ -28,7 +28,7 @@ function App() {
         element: <Profile />
       },
       {
-        path : '/search/:result',
+        path : '/search/:location',
         element : <SearchPage/>
       },
       {
@@ -43,7 +43,6 @@ function App() {
         path : '/order/success',
         element : <Success/>
       },
-      // admin functions start here
       {
         path : '/admin/restaurant',
         element : <RestaurantOwer/>
@@ -54,10 +53,13 @@ function App() {
       },{
         path : '/admin/order',
         element : <Orders/>
-      }
+      },
       ]
     },
-    {
+     // admin functions start here
+      
+      // common routes
+      {
       path: "/login",
       element: <Login />
     },
@@ -73,11 +75,7 @@ function App() {
       path: "/reset-password",
       element: <ResetPassword />
     },
-    {
-      path: "/verify",
-      element: <VerifyEmail />
-    }
-
+    
   ])
 
   return (

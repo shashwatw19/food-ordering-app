@@ -1,17 +1,20 @@
 import { Mail } from "lucide-react";
 import { LockKeyhole, Loader2 } from "lucide-react";
-import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 import { ChangeEvent, FormEvent, useState } from "react";
-import { LoginInputState , userLoginSchema } from "../schema/userSchema";
- 
+import { LoginInputState  } from "../../schema/userSchema";
+import { userLoginSchema } from "../../schema/userSchema"; 
+import { useUserStore } from "../../store/useUserStore";
+
 const Login = () => {
     const [input , setInput] = useState<LoginInputState>({
         email: "",
         password: "",
     })
-
+    const loading  = useUserStore((state)=>state.loading)
+    const signin = useUserStore((state)=>state.signin)
     // error generated will be one of the type in logininput state therefore using partial is a better choice
     const [errors , setErrors] = useState<Partial<LoginInputState>>({})
 
@@ -33,11 +36,17 @@ const Login = () => {
             email : "",
             password : ""
         })
-    
+        
+        console.log(input)
         // login api started here
-        console.log(result);
+        try{
+            const response = await signin(input);
+            console.log(response)
+        }catch(e){
+            console.log('error from login componenet' , e)
+        }
     }
-    const loading = 0
+    
     return (
         <div className="flex justify-center items-center h-screen w-screen">
             <form onSubmit={submitHandler} className="md:p-8 w-full max-w-md  border-gray-200 rounded-lg  flex flex-col gap-2">

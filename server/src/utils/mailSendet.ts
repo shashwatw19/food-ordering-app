@@ -11,7 +11,7 @@ const mailSender = async(email : string , title : string , body : string) =>{
                 pass : process.env.MAIL_PASSWORD
             }
         });
-
+        console.log('reached here in  maill')
         const info = await transporter.sendMail({
             from : `Food World | Shashwat <${process.env.MAIL_USER}>`,
             to : email , 

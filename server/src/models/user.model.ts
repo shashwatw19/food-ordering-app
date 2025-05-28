@@ -17,7 +17,7 @@ export interface IUser extends Document {
   avatarImage: string | null;
   lastLogin: Date;
   isVerified?: boolean;
-  resetPasswordToken?: string;
+  resetPasswordToken: string | undefined;
   verificationToken?: string;
   refreshToken?: string;
   matchPassword: (password: string) => Promise<Boolean>;
@@ -131,17 +131,29 @@ userSchema.methods.createResetPasswordToken = function (): string | undefined {
 };
 
 const sendResetPassworLink = async (email: string, token: string): Promise<void> => {
-    try {
+  console.log('reached here....')  
+  try {
+        if (!email || !token) {
+            throw new Error('Email and token are required');
+        }
+        console.log('reacched here in resetpassword')
         await mailSender(email, 'Reset Your Password', token);
-        console.log('verification mail sent successfully');
+        console.log('Reset password mail sent successfully');
     } catch (err) {
         console.log('error while sending verification mail');
+        throw err
     }
 }
 userSchema.pre("save", async function (next) {
-  if (this.isModified("resetPasswordToken") && this.resetPasswordToken) 
+  try{
+     if (this.isModified("resetPasswordToken") && this.resetPasswordToken) 
       await sendResetPassworLink(this.email , resetPasswordTemplate(this.resetPasswordToken))
+    console.log('reached here')
   next();
+  }catch (error : any) {
+        console.error('Pre-save hook error:', error);
+        next(error); // Pass error to next middleware
+    }
 });
 
 export const User: Model<IUser> = mongoose.model<IUser>("User", userSchema);

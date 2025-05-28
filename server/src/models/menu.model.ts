@@ -5,6 +5,7 @@ export interface IMenu extends Document {
   description: string;
   price: Number;
   imageUrl: string | null;
+  _id ?: mongoose.Schema.Types.ObjectId 
 }
 
 const menuSchema = new mongoose.Schema<IMenu>({

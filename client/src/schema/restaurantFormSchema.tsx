@@ -7,7 +7,7 @@ export const restaurantFromSchema = z.object({
     country: z.string().nonempty({ message: "Country is required" }),
     deliveryTime: z.number().min(0, { message: "Delivery time cannot be negative" }),
     cuisines: z.array(z.string()).min(1, { message: "At least one cuisine is required" }),
-    images: z.instanceof(File).nullable().refine((file) => file!==null && file?.size > 0, { message: "Image file is required" })
+    images:z.instanceof(File).optional().refine((file) => file?.size !== 0, {message:"Image file is required"}),
 });
 
 export type RestaurantFormSchema = z.infer<typeof restaurantFromSchema>

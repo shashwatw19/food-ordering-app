@@ -113,7 +113,7 @@ const forgotPassword = asyncHandler(async(req : Request , res : Response)=>{
     
     validUser.resetPasswordToken = resetToken
 
-    await validUser.save({ validateBeforeSave: false })
+    await validUser.save()
 
     return res.status(201).json(
         new ApiResponse(200 , 'reset token created successfully!')

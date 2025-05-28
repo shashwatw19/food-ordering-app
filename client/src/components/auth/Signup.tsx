@@ -1,53 +1,63 @@
-import {  Loader2, Mail, Phone, User } from "lucide-react";
+import { Loader2, Mail, Phone, User } from "lucide-react";
 import { LockKeyhole } from "lucide-react";
-import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 import { Link, } from "react-router-dom";
 import { ChangeEvent, FormEvent, useState } from "react";
-import { SignupInputState , userSignupSchema } from "../schema/userSchema";
-import { useUserStore } from "../store/useUserStore";
 import { useNavigate } from "react-router-dom";
+import { SignupInputState, userSignupSchema } from "../../schema/userSchema";
+import { useUserStore } from "../../store/useUserStore";
+import VerifyEmail from "./VerifyEmail";
 const Signup = () => {
-    const [input , setInput] = useState<SignupInputState>({
+    const [input, setInput] = useState<SignupInputState>({
         email: "",
         password: "",
-        fullname : "",
-        contact : ""
+        fullname: "",
+        contact: ""
     })
     const navigate = useNavigate()
-    const [error , setError] = useState<Partial<SignupInputState>>({})
-    const loading = useUserStore((state)=>state.loading)
-    const setFormData = useUserStore((state)=>state.setFormData)
-    const createOtp = useUserStore((state)=>state.createOtp)
-    const changeHandler = (e : ChangeEvent<HTMLInputElement>)=>{
-        const{name , value} = e.target
-        setInput({...input , [name] : value})
+    const [showVerification , setShowVerification] = useState<boolean>(false)
+    const [error, setError] = useState<Partial<SignupInputState>>({})
+    const loading = useUserStore((state) => state.loading)
+    const setFormData = useUserStore((state) => state.setFormData)
+    const createOtp = useUserStore((state) => state.createOtp)
+    const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target
+        setInput({ ...input, [name]: value })
     }
-    const submitHandler = async(e : FormEvent)=>{
+    const submitHandler = async (e: FormEvent) => {
         e.preventDefault()
         const result = userSignupSchema.safeParse(input);
-        if(!result.success){
+        if (!result.success) {
             const fieldError = result.error.formErrors.fieldErrors
             setError(fieldError as Partial<SignupInputState>)
-            return ;
+            return;
         }
-        
-        try{
-            await createOtp(input?.email);
+
+
+        const response = await createOtp(input?.email);
+        if (response) {
             setFormData(input)
-            navigate('/verify')
-        }catch(e){
-            console.log('errors' , e)
+            setShowVerification(true)
         }
-        
+
         setError({
-          email: "",
-          password: "",
-          fullname : "",
-          contact : ""
+            email: "",
+            password: "",
+            fullname: "",
+            contact: ""
         })
-}
- 
+        setInput({
+            email: "",
+            password: "",
+            fullname: "",
+            contact: ""
+        })
+    }
+    
+    if(showVerification)
+        return <VerifyEmail onVerificationComplete={()=>navigate('/login')}/>
+
     return (
         <div className="flex justify-center items-center h-screen w-screen">
             <form onSubmit={submitHandler} className="md:p-8 w-full max-w-md   border-gray-800 rounded-lg  flex flex-col gap-2">
@@ -80,10 +90,10 @@ const Signup = () => {
 
                 {error && <span className="text-sm text-red-500">{error.password}</span>}
 
-                
+
                 {
-                    !loading ? <Button type='submit'className="bg-orange-500 hover:bg-orange-400 w-full my-5 text-white " >Signup</Button> :
-                     <Button disabled className="bg-orange-400 hover:bg-orange-400 w-full my-5 " ><Loader2 className="animate-spin"/>Please Wait..</Button>
+                    !loading ? <Button type='submit' className="bg-orange-500 hover:bg-orange-400 w-full my-5 text-white " >Signup</Button> :
+                        <Button disabled className="bg-orange-400 hover:bg-orange-400 w-full my-5 " ><Loader2 className="animate-spin" />Please Wait..</Button>
                 }
 
                 <div className="mt-2 h-[1px] w-full bg-gray-400"></div>

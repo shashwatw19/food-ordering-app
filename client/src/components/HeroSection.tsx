@@ -19,7 +19,7 @@ const HeroSection = () => {
             </div>
             <div className="flex flex-row gap-2">
                 <div  className="relative w-full">
-                    <Input placeholder="Search restaurants by name,city and country" className="pl-10  rounded-md shadow-lg text-gray-600 text-xl" type="text" value={searchResults }  onChange={handleSearch}/>
+                    <Input placeholder="Enter your location to search restaurants nearby you" className="pl-10 capitalize  rounded-md shadow-lg text-gray-600 text-xl" type="text" value={searchResults }  onChange={handleSearch}/>
                     <Search className="absolute inset-y-2 left-2 text-gray-600"/>
                 </div>
                 <button onClick={()=>navigate( `/search/${searchResults}`)} className="bg-orange-500 hover:bg-orange-400 text-white font-semibold px-2 py-1 rounded-md ">Search</button>

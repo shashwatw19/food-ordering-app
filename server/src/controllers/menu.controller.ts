@@ -7,11 +7,14 @@ import { ApiResponse } from "../utils/ApiResponse";
 import { asyncHandler } from "../utils/asyncHandler";
 import { uploadImageOnCloudinary } from "../utils/cloudinary";
 import { Request , Response } from "express";
+import { IMenu } from "../models/menu.model";
+//get Menu for restaurant
+
 
 // addMenu
 const addMenu = asyncHandler(async(req: Request, res: Response) => {
     const _id = req.user?._id;
-    
+   
     // Log the request body to debug
     console.log("Request body:", req.body);
     
@@ -56,36 +59,35 @@ const addMenu = asyncHandler(async(req: Request, res: Response) => {
     }
 
     const restaurant = await Restaurant.findOne({ user: _id });
+    
     if(!restaurant) {
-        // Clean up the created menu if restaurant not found
-        await Menu.findByIdAndDelete(menu._id);
+        await Menu.findByIdAndDelete(menu._id)
         throw new ApiError(404, 'Restaurant not found');
     }
-    
-    
 
-    restaurant.menu.push(menu._id as Types.ObjectId);
-
+    (restaurant.menu as mongoose.Schema.Types.ObjectId[]).push(menu._id)
+    
     await restaurant.save({ validateBeforeSave: false });
 
     return res.status(201).json(
-        new ApiResponse(201, 'Menu item created successfully', { menu })
+        new ApiResponse(201, 'Menu item created successfully', {menu}  )
     );
 });
+
 // updateMenu
 const updateMenu = asyncHandler(async(req : Request , res : Response)=>{
-    const _id = req.params?._id;
+   
     const restaurant_id = req.user?._id
-    const { item , description , price} = req.body;
-
+    const { name , description , price , _id} = req.body;
+    console.log("Resquest " , req.body)
     const restaurant = await Restaurant.findOne({user  : restaurant_id});
     if(!restaurant)
         throw new ApiError(400 , 'restaurant not found');
     const availableMenu = await Menu.findById(_id);
     if(!availableMenu)
         throw new ApiError(400 , 'Menu not avalaible');
-    if(item?.trim() !== "")
-        availableMenu.name = item
+    if(name?.trim() !== "")
+        availableMenu.name = name
     if(description!.trim() != "")
         availableMenu.description = description
     if(Number(price) > 0 )
@@ -97,9 +99,9 @@ const updateMenu = asyncHandler(async(req : Request , res : Response)=>{
             throw new ApiError(404 , 'not able to upload image on Cloudinary');
         availableMenu.imageUrl = response
     }
-
+    
     await availableMenu.save({validateBeforeSave : false})
-    return res.status(201).json(
+    return res.status(200).json(
         new ApiResponse(200 , 'menu updated!' , availableMenu )
     )
 }) 

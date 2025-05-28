@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent } from "react";
-import { Input } from "../components/ui/input";
+import { Input } from "../ui/input";
 import { Mail } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";

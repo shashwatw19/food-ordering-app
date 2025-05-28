@@ -1,5 +1,5 @@
 import { create } from 'domain';
-import {createRestaurant, getResturantMenu  , getRestaurantOrder , updateOrderStatus , searchRestaurant , updateRestaurant } from '../controllers/restaurant.controller'
+import {createRestaurant, getResturantMenu  , getRestaurantOrder , updateOrderStatus , searchRestaurantWithFilters ,getRestaurant,  updateRestaurant } from '../controllers/restaurant.controller'
 import { verifyJwt } from '../middlewares/auth.middleware';
 import Router from 'express'
 import { upload } from '../middlewares/multer.middleware';
@@ -11,5 +11,7 @@ router.route('/menu').get(verifyJwt , getResturantMenu);
 router.route('/order/:_id').post(verifyJwt , getRestaurantOrder);
 router.route('/order/update').put(verifyJwt , updateOrderStatus);
 router.route('/update').put(verifyJwt , upload.single("image") ,  updateRestaurant)
+router.route('/search/:location').get(searchRestaurantWithFilters)
+router.route('/').get(verifyJwt , getRestaurant)
 
 export default router

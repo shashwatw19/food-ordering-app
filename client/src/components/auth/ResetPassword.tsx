@@ -1,4 +1,4 @@
-import { Input } from "../components/ui/input"
+import { Input } from "../ui/input"
 import { Loader2 } from "lucide-react"
 import { LockKeyholeIcon } from "lucide-react"
 import { ChangeEvent, FormEvent, useState } from "react"
