@@ -20,6 +20,7 @@ export interface IUser extends Document {
   resetPasswordToken: string | undefined;
   verificationToken?: string;
   refreshToken?: string;
+  isAdmin?:boolean;
   matchPassword: (password: string) => Promise<Boolean>;
   generateAccessToken: () => Promise<string>;
   generateRefreshToken: () => Promise<string>;
@@ -59,6 +60,10 @@ const userSchema = new mongoose.Schema<IUser>(
     avatarImage: {
       type: String,
     },
+    isAdmin : {
+      type : Boolean,
+      default : false
+    }
   },
   { timestamps: true }
 );

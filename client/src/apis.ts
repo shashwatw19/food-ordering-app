@@ -6,7 +6,11 @@ export const User =  {
     FORGOT_PASSWORD : BASE_URL + '/user/forgot-password',
     RESET_PASSWORD : BASE_URL + '/user/reset-password/:token',
     UPDATE_PROFILE : BASE_URL + '/user/updateProfile',
-    CREATE_OTP : BASE_URL + '/user/createOtp'
+    CREATE_OTP : BASE_URL + '/user/createOtp',
+    CHECK_AUTH : BASE_URL + '/user/verify',
+    LOG_OUT : BASE_URL + '/user/logout',
+
+   
 }
 
 export const Restaurants = {
@@ -17,6 +21,21 @@ export const Restaurants = {
     UPDATE_ORDER_STATUS : BASE_URL + 'restaurant/order/update',
     ADD_MENU : BASE_URL + '/menu/addMenu',
     UPDATE_MENU : BASE_URL + '/menu/updateMenu',
-    GET_RESTAURANT : BASE_URL +'/restaurant/',
+    GET_RESTAURANT : BASE_URL +'/restaurant',
     GET_MENU : BASE_URL + '/restaurant/menu'
+}
+
+
+export const PAYMENTS = {
+    CAPTURE_PAYMENT : BASE_URL + '/payment/capturePayment',
+    VERIFY_PAYMENT : BASE_URL + '/payment/verify',
+    SEND_ORDER_SUCCESS_MAIL : BASE_URL + '/payment/successOrderMail'
+}
+
+export const ORDERS = {
+    STATUS : BASE_URL + '/order/status',
+    DELIVERED_ORDERS : BASE_URL + '/order/delivered',
+    FIND_ORDERS : BASE_URL + '/order/findOrders',
+    GET_ORDER : BASE_URL + '/order/getOrder',
+    PENDING_ORDER : BASE_URL + '/order/pending'
 }

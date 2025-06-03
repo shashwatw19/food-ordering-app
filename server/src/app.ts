@@ -21,10 +21,15 @@ app.get('/api/v1' , (req ,res )=>{res.send('Heelo mf!!')})
 import userRouter from '../src/routes/user.routes'
 import restaurantRouter from '../src/routes/restaurant.routes'
 import menuRouter from '../src/routes/menu.routes'
+import paymentRouter from '../src/routes/payments.routes'
+import orderRouter from '../src/routes/order.routes'
 
 app.use('/api/v1/user' , userRouter)
 app.use('/api/v1/restaurant' , restaurantRouter)
 app.use('/api/v1/menu' , menuRouter)
+app.use('/api/v1/payment', paymentRouter)
+app.use('/api/v1/order' , orderRouter)
+
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     const statusCode = err.statusCode || 500;

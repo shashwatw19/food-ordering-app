@@ -54,7 +54,7 @@ const VerifyEmail = ({ onVerificationComplete }: VerificationEmailProps) => {
     }
 
     return (
-    <div className="flex justify-center items-center w-screen h-screen">
+    <div className="flex justify-center md:p-8 p-4 items-center w-screen h-screen">
         <div className="flex flex-col gap-5  items-center w-full max-w-md">
             <div className="flex flex-col items-center gap-2">
                 <h2 className="text-black text-2xl font-bold">Verify Your Email</h2>

@@ -43,6 +43,5 @@ export type RestaurantState = {
     setAppliedFilter: (value:string) => void;
     resetAppliedFilter: () => void,
     getSingleRestaurant: (restaurantId:string) => Promise<void>,
-    getRestaurantOrders: () => Promise<void>,
-    updateRestaurantOrder: (orderId:string, status:string) => Promise<void>,
+    setRestaurantNull : ()=>void
 }

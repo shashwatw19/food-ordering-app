@@ -1,45 +1,75 @@
 
 import React, { useRef, useState } from "react";
 import { Avatar , AvatarFallback , AvatarImage } from "./ui/avatar";
-import { Loader2, LocateIcon, Mail, MapPin, MapPinnedIcon, Plus } from "lucide-react";
+import { Loader2, LocateIcon, Mail, MapPin, MapPinnedIcon, PhoneIcon, Plus, User2 } from "lucide-react";
 import { Input } from "./ui/input";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { Button } from "./ui/button";
-
+import userImage from "../assets/user.png"
+import { useUserStore } from "../store/useUserStore";
+export type UpdateProfileInput = {
+  fullname : string,
+  city : string,
+  image:  string | Blob,
+  address  : string
+  
+}
 const Profile = () => {
   const imageRef = useRef<HTMLInputElement>(null);
-  const [selectedProfilePicture, setSelectedProfilePicture] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const fileChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      setSelectedProfilePicture(URL.createObjectURL(file));
-    }
+  const [selectedProfilePicture, setSelectedProfilePicture] = useState<string | null>(null);
+  const loading = useUserStore((state)=>state.loading)
+  const [input , setInput] = useState<UpdateProfileInput>({
+    fullname : "",
+    city : "",
+    image  : "",
+    address: ""
+  })
+
+  const fileChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (file) {
+    setSelectedProfilePicture(URL.createObjectURL(file)); // For preview only based 64
+    setInput((prevData) => ({
+      ...prevData,
+      image: file, // Store the File object itself
+    }));
+  }
   };
 
+  const updateProfile = useUserStore((state)=>state.updateProfile)
+  const user = useUserStore((state)=>state.user)
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     // Handle input changes
-    console.log(event.target.name, event.target.value);
+    const {name , value } = event.target
+    setInput({...input , [name] : value});
   };
 
-  const updateProfileHandler = (event: React.FormEvent<HTMLFormElement>) => {
+  const updateProfileHandler = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      alert("Profile updated!");
-    }, 2000);
+    console.log("input from update profile" , input)
+    
+    try{
+      const formData = new FormData()
+    formData.append("fullname " , input.fullname)
+    formData.append("city" , input.city)
+    formData.append("image" , input.image)
+    formData.append("address" , input.address)
+      
+    await updateProfile(formData)
+
+    }catch(e){
+      console.log("some error occured in Profile Component" , e)
+    }
+
   };
 
   return (
-    <form onSubmit={updateProfileHandler} className="max-w-7xl mx-auto my-15">
+    <form onSubmit={updateProfileHandler} className="max-w-7xl min-h-screen mx-auto my-15 p-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Avatar className="relative md:w-28 md:h-28 w-20 h-20">
-            <AvatarImage />
-            <AvatarFallback>CN</AvatarFallback>
+            <img src={selectedProfilePicture !== null ? selectedProfilePicture : ( user?.avatarImage || userImage) } />
             <input
               ref={imageRef}
               className="hidden"
@@ -54,12 +84,14 @@ const Profile = () => {
           <Input
             type="text"
             name="fullname"
+            value={input.fullname}
+            placeholder={user?.fullname}
             onChange={changeHandler}
             className="font-bold text-2xl outline-none border-none focus-visible:ring-transparent"
           />
         </div>
       </div>
-      <div className="grid md:grid-cols-4 md:gap-2 gap-3 my-10">
+      <div className="grid md:grid-cols-4 md:gap-2 gap-3 my-10 ">
         <div className="flex items-center  gap-4 rounded-sm p-2 bg-gray-200">
           <Mail className="text-gray-500" />
           <div className="w-full">
@@ -67,8 +99,9 @@ const Profile = () => {
             <input
             disabled
               name="email"
-              
+              value={user?.email}
               onChange={changeHandler}
+              placeholder={user?.email}
               className="w-full text-gray-600 bg-transparent focus-visible:ring-0 focus-visible:border-transparent outline-none border-none"
             />
           </div>
@@ -79,9 +112,10 @@ const Profile = () => {
             <Label>Address</Label>
             <input
               name="address"
-             
+              value={input?.address}
               onChange={changeHandler}
-              className="w-full text-gray-600 bg-transparent focus-visible:ring-0 focus-visible:border-transparent outline-none border-none"
+              placeholder={user?.address}
+              className="w-full text-gray-600 bg-transparent focus-visible:ring-0 focus-visible:border-transparent capitalize outline-none border-none"
             />
           </div>
         </div>
@@ -91,33 +125,36 @@ const Profile = () => {
             <Label>City</Label>
             <input
               name="city"
-             
+              value={input?.city}
               onChange={changeHandler}
-              className="w-full text-gray-600 bg-transparent focus-visible:ring-0 focus-visible:border-transparent outline-none border-none"
+              placeholder={user?.city}
+              className="w-full text-gray-600 bg-transparent focus-visible:ring-0 focus-visible:border-transparent capitalize outline-none border-none"
             />
           </div>
         </div>
+         
         <div className="flex items-center gap-4 rounded-sm p-2 bg-gray-200">
-          <MapPinnedIcon className="text-gray-500" />
+          <PhoneIcon className="text-gray-500" />
           <div className="w-full">
-            <Label>Country</Label>
+            <Label>Contact</Label>
             <input
-              name="country"
-             
+              name="contact"
+              value={user?.contact}
               onChange={changeHandler}
+              disabled 
               className="w-full text-gray-600 bg-transparent focus-visible:ring-0 focus-visible:border-transparent outline-none border-none"
             />
           </div>
         </div>
       </div>
-      <div className="text-center">
-        {isLoading ? (
-          <Button disabled className="bg-orange hover:bg-hoverOrange">
-            <Loader2 className="mr-2 w-4 h-4 animate-spin" />
-            Please wait
+      <div className="flex w-[50%] items-center  justify-start">
+        {loading ? (
+          <Button disabled className="bg-gray-800 w-[40%] flex  justify-center items-center hover:bg-hoverOrange">
+            <Loader2 className="animate-spin " />
+            Please Wait
           </Button>
         ) : (
-          <Button type="submit" className="bg-orange hover:bg-hoverOrange">Update</Button>
+          <Button type="submit" className="bg-gray-800 w-[40%] hover:bg-hoverOrange">Update</Button>
         )}
       </div>
     </form>

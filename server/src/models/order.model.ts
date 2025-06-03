@@ -1,15 +1,16 @@
 import mongoose from "mongoose";
 
-type DeliveryDetails = {
-  name: string;
+export type DeliveryDetails = {
+  fullname: string;
   email: string;
   address: string;
   city: string;
+  contact : string
 };
-type CartDetails = {
-  menuId: string;
+export type CartItems = {
+  _id: string;
   name: string;
-  image: string;
+  imageUrl: string;
   price: number;
   quantity: number;
 };
@@ -17,8 +18,8 @@ type CartDetails = {
 export interface IOrder extends Document {
   user: mongoose.Schema.Types.ObjectId;
   restaurant: mongoose.Schema.Types.ObjectId;
-  deliveryDetails: DeliveryDetails;
-  cartDetails: CartDetails;
+  DeliveryDetails: DeliveryDetails;
+  cartItems: CartItems[];
   totalAmount: number;
   status:
      "pending"
@@ -40,17 +41,18 @@ const orderSchema = new mongoose.Schema<IOrder>(
       ref: "Restaurant",
       required: true,
     },
-    deliveryDetails: {
+    DeliveryDetails: {
       email: { type: String, required: true },
-      name: { type: String, required: true },
+      fullname : { type: String, required: true },
       address: { type: String, required: true },
       city: { type: String, required: true },
+      contact : {type : String , require : true}
     },
-    cartDetails: [
+    cartItems: [
       {
-        menuId: { type: String, required: true },
+        _id: { type: String, required: true },
         name: { type: String, required: true },
-        image: { type: String, required: true },
+        imageUrl: { type: String },
         price: { type: Number, required: true },
         quantity: { type: Number, required: true },
       },

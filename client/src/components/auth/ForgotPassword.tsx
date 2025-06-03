@@ -17,7 +17,7 @@ function ForgotPassword() {
         console.log(email)
     }
   return (
-   <div className="flex justify-center flex-col gap-4 items-center w-screen h-screen ">
+   <div className="flex justify-center md:p-8 p-4 flex-col gap-4 items-center w-screen h-screen ">
         <form onSubmit={submitHandler} className="flex flex-col items-center gap-6 max-w-md w-full border-gray-400 rounded-lg ">
             <div>
                 <div >

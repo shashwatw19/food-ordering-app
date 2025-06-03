@@ -162,17 +162,16 @@ const updateProfile = asyncHandler(async(req : Request , res : Response)=>{
       user.avatarImage = response 
     }
 
-    const { fullname, contact } = req.body;
+    const { fullname, address , city } = req.body;
     if (fullname && fullname.trim() !== "") {
         user.fullname = fullname;
     }
-    if (contact && contact.trim() !== "") {
-        user.contact = contact;
+    if (address && address.trim() !== "") {
+        user.address = address;
     }
-
-    // Handle avatarImage as a file upload
-    
-
+     if (city && city.trim() !== "") {
+        user.city = city;
+    }
     await user.save({ validateBeforeSave: false });
 
     const updatedUser = await User.findById(_id).select('-password -refreshToken');
@@ -183,4 +182,47 @@ const updateProfile = asyncHandler(async(req : Request , res : Response)=>{
 
 })
 
-export {signup , signin , forgotPassword ,  updateProfile , resetPassword}
+// checkAuth
+const checkAuth = asyncHandler(async(req : Request , res: Response)=>{
+    const _id = req.user?._id
+    const validUser = await User.findById(_id)
+
+    if(!validUser){
+        throw new ApiError(404 , 'user is not found..')
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200 , 'valid user')
+    )
+}) 
+const logout = asyncHandler(async(req,res)=>{
+    const currentUser = req.user?._id
+
+  const logOutUser =   await User.findByIdAndUpdate(currentUser , 
+        {
+            $unset : {
+                refreshToken : 1
+            }
+        },
+        {
+            new : true
+        })
+    
+    const options = {
+        httpOnly : true,
+        secure : true
+    }
+
+    if(!logOutUser){
+        throw new ApiError(401 , 'LogOut Failed')
+    }
+
+    return res.status(201)
+    .clearCookie('verificationToken' , options)
+    .clearCookie('refreshToken' , options)
+    .json(
+        new ApiResponse(200 , 'User logged out successfully',{user : req.user?.fullname})
+    )
+})
+
+export {signup , signin , forgotPassword ,  updateProfile , resetPassword  , checkAuth , logout}

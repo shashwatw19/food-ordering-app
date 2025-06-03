@@ -5,6 +5,7 @@ import { MenuItem } from "../types/restaurantType";
 import { toast } from "sonner";
 import axios from "axios";
 import {Restaurants} from '../apis'
+import { useUserStore } from "./useUserStore";
 
 
 axios.defaults.withCredentials = true;
@@ -35,6 +36,7 @@ const useRestaurantStore = create<RestaurantState>()(
           }
           toast.success('Your Restaurant Has Been Successfull Added!')
           set({restaurant : response.data.data})
+          useUserStore.getState().updateAdminStatus()
           return true;
         }catch(e){
           if(axios.isAxiosError(e)){
@@ -59,6 +61,7 @@ const useRestaurantStore = create<RestaurantState>()(
             return false
           }
           toast.success('restaurant found')
+          console.log(response.data.data)
           set({restaurant : response.data.data})
           return true
         }catch(e){
@@ -188,12 +191,35 @@ const useRestaurantStore = create<RestaurantState>()(
         })
       },
       
-      getSingleRestaurant: async (restaurantId: string) => {},
-
+      getSingleRestaurant: async (restaurantId: string) => {
+        const toastId = toast.loading('loading...')
+        try{
+          set({loading : true})
+          const response = await axios.get(`${Restaurants.GET_RESTAURANT}/${restaurantId}`)
+          console.log("resposne from get SingleRestaurant" , response)
+          toast.success("restaurant found!!")
+          set({restaurant : response.data.data})
+          
+        }catch(e){
+          if(axios.isAxiosError(e)){
+            const errorMessage = e.response?.data.message || "failed to search restaurant"
+            toast.error(errorMessage)
+            console.error({error : e.message , statusCode : e.status})
+          }
+        
+        }finally{
+         
+          set({loading : false})
+        
+         toast.dismiss(toastId)
+        }
+      },
+       
+      setRestaurantNull : ()=>{
+        set({restaurant : null})
+      }
       
-      // after payment integration....
-      getRestaurantOrders: async () => {},
-      updateRestaurantOrder: async (orderId: string, status: string) => {},
+     
     }),
     { name: "restaurant-name", storage: createJSONStorage(() => localStorage) }
   )

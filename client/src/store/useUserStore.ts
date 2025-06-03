@@ -5,6 +5,10 @@ import { LoginInputState, SignupInputState } from "../schema/userSchema";
 import { toast } from "sonner";
 import axios, { AxiosError } from "axios";
 import { User } from "../apis";
+import { useCartStore } from "./useCartStore";
+import { UpdateUserProfile } from "../types/updateUserProfile";
+import { useRestaurantStore } from "./useRestaurantStore";
+import { useOrderStore } from "./useOrderStore";
 const useUserStore = create<UserState>()(
   persist(
     (set) => ({
@@ -95,11 +99,11 @@ const useUserStore = create<UserState>()(
               },
             }
           );
-          if (!response?.data.success) {
-            toast.error(response.data.message)
-            return false
-          }
+         
           console.log(response.data);
+          set({user : response.data.data})
+          set({isAuthenticated : true})
+          
           toast.success("Login Success");
           return response.data.success;
         } catch (e: any) {
@@ -169,12 +173,95 @@ const useUserStore = create<UserState>()(
           toast.dismiss(toastId);
         }
       },
-      updateProfile: async (input: any) => {
-        return false;
+      updateProfile: async (input: UpdateUserProfile) => {
+          const toastId = toast.loading("Updating...")
+          try{
+            set({loading : true})
+            const response = await axios.put(User.UPDATE_PROFILE , input , {
+              headers : {
+                'Content-Type' : 'multipart/form-data'
+              }
+            } )
+
+            console.log("response from update Profile" , response.data)
+            toast.success('Profile Updated!')
+   
+            set({user : response?.data.data.updatedUser })
+            return true
+          }catch(e){
+            if(axios.isAxiosError(e)){
+              const errorMessage = e.response?.data.message || "SOMETHING WENT WRONG"
+              toast.error(errorMessage)
+              console.error({
+                error : e,
+                message : errorMessage
+              })
+            }
+            return false
+          }finally{
+            set({loading : false})
+            toast.dismiss(toastId)
+          }
       },
       logout: async () => {
-        return false;
+        try{
+          set({loading : true})
+          const response =  await axios.post(User.LOG_OUT , {} )
+          set({user : null})
+          set({isAuthenticated : false})
+          useCartStore.getState().resetCart()
+          useCartStore.setState({restaurantId : null})
+          useRestaurantStore.getState().setRestaurantNull()
+          useOrderStore.getState().setOrderData()
+          console.log("response from logout " , response)
+          return true
+        }catch(e){
+          if(axios.isAxiosError(e)){
+            const errorMessage = e.response?.data.message || 'FAILED TO LOGOUT'
+            toast.error(errorMessage)
+            console.error({
+              message : errorMessage,
+              error : e
+            })
+
+            
+          }
+          return false
+        }finally{
+          set({loading : false})
+        } 
       },
+      checkAuth : async()=>{
+        try{
+          const response = await axios.get(User.CHECK_AUTH)
+          console.log("response from checkAuth " , response)
+        }catch(e){
+          if(axios.isAxiosError(e)){
+            const errorMessage = e.response?.data?.message || "AUTHENTICATION FAILED"
+            console.error({
+              error : e,
+              message : errorMessage
+            })
+
+          }
+          set({user : null})
+          set({isAuthenticated : false})
+          useCartStore.getState().resetCart()
+        }
+      },
+     updateAdminStatus : ()=>{
+      set((state) => {
+      if (!state.user) return state; // Do nothing if user is null
+
+      return {
+      user: {
+        ...state.user,
+        isAdmin: true,
+        },
+      };
+  });
+
+     }
     }),
     {
       name: "user-storage",

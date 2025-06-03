@@ -60,7 +60,7 @@ const Signup = () => {
 
     return (
         <div className="flex justify-center items-center h-screen w-screen">
-            <form onSubmit={submitHandler} className="md:p-8 w-full max-w-md   border-gray-800 rounded-lg  flex flex-col gap-2">
+            <form onSubmit={submitHandler} className="md:p-8 w-full max-w-md p-4  border-gray-800 rounded-lg  flex flex-col gap-2">
                 <h1 className="text-center font-bold">APP NAME</h1>
                 <div className="relative">
                     <Input placeholder="Name" onChange={changeHandler} type="text" name="fullname" value={input.fullname} className="pl-10 focus-visible:ring-0" />

@@ -7,12 +7,13 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { LoginInputState  } from "../../schema/userSchema";
 import { userLoginSchema } from "../../schema/userSchema"; 
 import { useUserStore } from "../../store/useUserStore";
-
+import { useNavigate } from "react-router-dom";
 const Login = () => {
     const [input , setInput] = useState<LoginInputState>({
         email: "",
         password: "",
     })
+    const navigate = useNavigate()
     const loading  = useUserStore((state)=>state.loading)
     const signin = useUserStore((state)=>state.signin)
     // error generated will be one of the type in logininput state therefore using partial is a better choice
@@ -41,7 +42,8 @@ const Login = () => {
         // login api started here
         try{
             const response = await signin(input);
-            console.log(response)
+            if(response)
+                navigate('/')
         }catch(e){
             console.log('error from login componenet' , e)
         }
@@ -49,7 +51,7 @@ const Login = () => {
     
     return (
         <div className="flex justify-center items-center h-screen w-screen">
-            <form onSubmit={submitHandler} className="md:p-8 w-full max-w-md  border-gray-200 rounded-lg  flex flex-col gap-2">
+            <form onSubmit={submitHandler} className="md:p-8 w-full max-w-md p-4 border-gray-200 rounded-lg  flex flex-col gap-2">
                 <h1 className="text-center font-bold">APP NAME</h1>
                 <div className="relative">
                     <Input placeholder="Email" onChange={changeHandler} type="email" name="email" value={input.email} className="pl-10 focus-visible:ring-0" />

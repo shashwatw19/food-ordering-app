@@ -5,6 +5,7 @@ import { Restaurant } from "../models/restaurant.model";
 import { Request, Response } from "express";
 import { uploadImageOnCloudinary } from "../utils/cloudinary";
 import { Menu } from "../models/menu.model";
+import { User } from "../models/user.model";
 import { Order } from "../models/order.model";
 // createRestautant
 const createRestaurant = asyncHandler(async (req: Request, res: Response) => {
@@ -54,7 +55,11 @@ const createRestaurant = asyncHandler(async (req: Request, res: Response) => {
 
   if (!newRestaurant)
     throw new ApiError(401, "Not able to create restaurant the moment!");
-
+  
+  
+  await User.findByIdAndUpdate(_id , {
+    isAdmin : true
+  })
   return res
     .status(200)
     .json(
@@ -213,6 +218,21 @@ const getRestaurant = asyncHandler(async (req: Request, res: Response) => {
     .status(201)
     .json(new ApiResponse(200, "restaurant found", restaurant));
 });
+const getSingleRestaurant = asyncHandler(async(req : Request , res :Response)=>{
+  const {_id} = req.params
+  if(!_id)
+    throw new ApiError(404 , 'restaurant id not found ')
+  const restaurant = await Restaurant.findById(_id).populate('menu')
+
+  if(!restaurant){
+    throw new ApiError(404 , 'restaurant not found')
+  }
+
+  return res.status(200).json(
+    new ApiResponse(200 , 'Restaurant found' , restaurant )
+  )
+
+})
 // remaning.......................
 export {
   createRestaurant,
@@ -223,4 +243,5 @@ export {
   searchRestaurant,
   updateRestaurant,
   searchRestaurantWithFilters,
+  getSingleRestaurant
 };
