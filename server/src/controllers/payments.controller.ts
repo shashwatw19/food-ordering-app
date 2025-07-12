@@ -134,4 +134,5 @@ const sendOrderSuccessMail = asyncHandler(async(req : Request , res : Response)=
       throw new ApiError(500 , 'error while sending success mail')
   }
 })
+
 export {capturePayment , verifyPayment , sendOrderSuccessMail}

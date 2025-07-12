@@ -82,7 +82,7 @@ const SearchPage = () => {
                                                         <img
                                                             src={restaurant.imageUrl}
                                                             alt={restaurant.restaurantName}
-                                                            className="object-cover w-full h-[140px]"
+                                                            className="object-cover w-full h-[100px]"
                                                         />
                                                         <span className="absolute top-2 left-2 bg-orange-100 text-orange-600 font-medium px-2 py-0.5 rounded-md text-xs shadow-sm">
                                                             Featured
@@ -107,14 +107,14 @@ const SearchPage = () => {
                                                         </div>
 
                                                         <div className="flex flex-wrap gap-1 mt-3">
-                                                            {restaurant.cuisines.slice(0, 4).map((tag, index) => (
+                                                            {restaurant.cuisines.slice(0, 3).map((tag, index) => (
                                                                 <span key={index} className="bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full text-xs font-medium">
                                                                     {tag}
                                                                 </span>
                                                             ))}
                                                             {restaurant.cuisines.length > 3 && (
                                                                 <span className="bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full text-xs font-medium">
-                                                                    +{restaurant.cuisines.length - 4} more
+                                                                    +{restaurant.cuisines.length - 3} more
                                                                 </span>
                                                             )}
                                                         </div>
