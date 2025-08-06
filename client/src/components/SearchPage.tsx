@@ -72,7 +72,7 @@ const SearchPage = () => {
                         <>
                             {
                                 !loading && searchedRestaurant?.length == 0 ? (<NoResultFound searchText={params.location!} />) :
-                                    <div className="flex flex-row items-center gap-5 flex-wrap ">
+                                    <div className="flex flex-row items-center gap-5 flex-wrap">
                                         {searchedRestaurant && searchedRestaurant.map((restaurant) => {
                                             return <div>
                                                 <Card className="bg-white dark:bg-gray-900 shadow-lg hover:shadow-xl transition-shadow duration-300 w-[280px] h-[420px] rounded-2xl overflow-hidden flex flex-col justify-between border border-gray-100 dark:border-gray-800">

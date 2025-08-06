@@ -50,7 +50,9 @@ function App() {
       },
       {
         path: '/profile',
-        element: <Profile />
+        element: <ProtectedRoutes>
+          <Profile />
+        </ProtectedRoutes>
       },
       {
         path: '/search/:location',
