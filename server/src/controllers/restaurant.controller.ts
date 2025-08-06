@@ -22,6 +22,7 @@ const createRestaurant = asyncHandler(async (req: Request, res: Response) => {
   if (deliveryTime < 0) throw new ApiError(400, "Delivery time cannot be zero");
 
   let cuisinesArray: string[] = [];
+  console.log("cuisines from req , " , cuisines)
   try {
     cuisinesArray = JSON.parse(cuisines)
       ?.map((cuisine: string) => cuisine?.trim())
@@ -101,6 +102,7 @@ const updateRestaurant = asyncHandler(async (req: Request, res: Response) => {
     restaurant.deliveryTime = deliveryTime;
 
   let cuisinesArray: string[] = [];
+  console.log("cuisines from req , " , cuisines)
   if (cuisines) {
     try {
       cuisinesArray = JSON.parse(cuisines)
@@ -184,7 +186,7 @@ const searchRestaurantWithFilters = asyncHandler(
     const selectedCuisines = ((req.query.selectedCuisines as string) || "")
       .split(",")
       .filter((item) => item);
-      console.log(searchLocation ,"  " , searchQuery,"  " , selectedCuisines)
+      console.log(searchLocation ,searchQuery,selectedCuisines)
     const query: any = {};
 
     if (searchLocation) {
@@ -198,10 +200,15 @@ const searchRestaurantWithFilters = asyncHandler(
     }
 
     if (selectedCuisines?.length > 0) {
-      query.cuisines = { $in: selectedCuisines };
+      // Use case-insensitive regex matching for cuisines
+      query.cuisines = { 
+        $in: selectedCuisines.map(cuisine => new RegExp(cuisine, "i"))
+      };
     }
 
+    console.log("Final query:", JSON.stringify(query, null, 2));
     const restaurants = await Restaurant.find(query);
+    console.log("Found restaurants:", restaurants.length);
     return res
       .status(200)
       .json(new ApiResponse(200, "query completed", restaurants));

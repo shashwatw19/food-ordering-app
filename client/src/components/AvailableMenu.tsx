@@ -42,7 +42,7 @@ const AvailableMenu = ({currRestaurant_id} : {currRestaurant_id : string}) => {
     useCartStore.setState({restaurantId : null})
   }
   return (
-    <div className="max-w-7xl mx-auto min-h-screen rounded-md ">
+    <div className="max-w-7xl mx-auto min-h-screen rounded-md  ">
       <h1 className="text-xl md:text-2xl font-extrabold mb-6">Available Menu</h1>
       <div className="flex flex-row flex-wrap gap-4">
         {

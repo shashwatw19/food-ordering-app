@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@radix-ui/react-dialog"
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "../ui/dialog"
 import { Label } from "@radix-ui/react-menubar"
 import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect } from "react"
 import { DialogHeader, DialogFooter } from "../ui/dialog"
@@ -74,7 +74,7 @@ const EditMenu = ({ editOpen , selectedMenu , setSelectedMenu , setEditOpen , se
     return (
         <Dialog open={editOpen} onOpenChange={setEditOpen}>
     
-            <DialogContent className="bg-gray-50 rounded-md p-1 mx-auto className='md:grid md:grid-cols-2 gap-2 space-y-1 md:space-y-0 mt-3">
+            <DialogContent className="bg-gray-50 rounded-md p-1 mx-auto">
                 <DialogHeader>
                     <div className="p-2">
                         <DialogTitle className="text-xl font-medium   text-center">Edit Menu</DialogTitle>

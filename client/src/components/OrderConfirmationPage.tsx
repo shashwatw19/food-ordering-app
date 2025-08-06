@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@radix-ui/react-dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from './ui/dialog';
 import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect } from 'react';
 import { toast } from 'sonner';
 import { Label } from '@radix-ui/react-menubar';

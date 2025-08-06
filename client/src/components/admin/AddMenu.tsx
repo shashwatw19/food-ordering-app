@@ -1,7 +1,7 @@
-import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@radix-ui/react-dialog"
+
 import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { Plus } from "lucide-react"
-import { DialogFooter, DialogHeader } from "../ui/dialog"
+import { DialogFooter, DialogHeader, DialogDescription, Dialog, DialogContent, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { Label } from "@radix-ui/react-menubar"
 import { Input } from "../ui/input"
 import { MenuFormSchema, menuFromSchema } from "../../schema/menuFormSchema"
@@ -103,7 +103,7 @@ const AddMenu = () => {
                         <button onClick={() => setOpen(!open)} className="bg-orange-500 text-white p-2 hover:bg-orange-400 font-semibold flex flex-row justify-items-center gap-1  rounded-md"><Plus />Add Menu</button>
                     </DialogTrigger>
                 </div>
-                <DialogContent className="bg-gray-50 rounded-md p-1 mx-auto className='md:grid md:grid-cols-2 gap-2 space-y-1 md:space-y-0 mt-3">
+                <DialogContent className="bg-gray-50 rounded-md p-1 mx-auto">
                     <DialogHeader>
                         <div className="p-2">
                             <DialogTitle className="text-xl font-medium   text-center">Add A New Menu</DialogTitle>
@@ -135,7 +135,7 @@ const AddMenu = () => {
                                     }
                                 </div>
                                 <div className='p-2 flex flex-col items-start gap-1  '>
-                                    <Label className='text-gray-700 font-medium'>contact</Label>
+                                    <Label className='text-gray-700 font-medium'>Image</Label>
                                     <Input type="file" accept="image/*" name='image' onChange={(e) => setMenu({ ...menu, images: e.target.files ? e.target.files?.[0] : undefined })} />
                                     {
                                         errors?.images && <span className="text-red-500 text-sm">{errors.images?.name || "image file is required"}</span>

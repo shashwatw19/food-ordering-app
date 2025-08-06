@@ -5,10 +5,19 @@ export type FilterOptions = {
     label : string 
 }
 const filterOptionType : FilterOptions[]= [
-    {id : "burger" , label : "Burger"},
-    {id : "thali" , label : "Thali"},
-    {id : "biryani" , label : "Biryani"},
+   
+    {id : "chinese" , label : "Chinese"},
+    {id : "continental" , label : "Continental"},
+    {id : "dessert" , label : "Dessert"},
+    
+    {id : "italian" , label : "Italian"},
+    {id : "mexican" , label : "Mexican"},
     {id : "momos" , label : "Momos"},
+    {id : "north-indian" , label : "North Indian"},
+   
+   
+    {id : "south-indian" , label : "South Indian"},
+    
     
 ]
 
@@ -27,10 +36,10 @@ const FilterPage = ()=>{
                 <h1 className="font-medium text-lg">Filter by cuisines</h1>
                 <button onClick={resetAppliedFilter} className="bg-gray-100 rounded-md py-1 px-2 text-gray-800 text-sm font-medium">Reset</button>
             </div>
-            <div>
+            <div className="flex md:flex-col md:gap-0 md:mt-0 mt-2 flex-row gap-3 flex-wrap">
                 {
                     filterOptionType?.map((option)=>{
-                        return <div key={option.id} className="flex items-center space-x-2 my-2" >
+                        return <div key={option.id} className="flex items-center space-x-2 my-2 flex-wrap" >
                             <input onChange={()=>handleAppliedFilter(option.label)} type="checkbox" checked={appliedFilter.includes(option.label)} id={option.id}/>
                             <label  className="text-gray-700 font-medium text-sm" htmlFor={option.id}>{option.label}</label>
                         </div>

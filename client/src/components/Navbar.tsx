@@ -23,6 +23,7 @@ const Navbar = () => {
     const isAuthenticated = useUserStore((state) => state.isAuthenticated)
     const user = useUserStore((state) => state.user)
     const loading = useUserStore((state) => state.loading)
+    // const loading = true;
     const logout = useUserStore((state) => state.logout)
     return (
         <div className='max-w-7xl mx-auto p-3'>
@@ -106,9 +107,9 @@ const Navbar = () => {
                             <div>
                                 {
                                     !loading ?
-                                        <button className="bg-orange-500 hover:bg-orange-400 rounded-md  text-white  font-semibold px-2 py-1 " onClick={() => logout()}>Logout</button> :
-                                        <button className="bg-orange-500 text-white font-semibold  text-sm flex  flex-row justify-center w-full gap-2 items-center px-2 py-1 rounded-md">
-                                            <Loader2 className="text-white text-xs animate-spin" />Good Bye Foodie!</button>
+                                        <button className="bg-orange-500 hover:bg-orange-400 rounded-md w-17 text-white  font-semibold px-2 py-1" onClick={()=>logout()}>Logout</button> :
+                                        <button className="bg-orange-500 text-white font-semibold w-17 text-sm flex  flex-row justify-center  gap-2 items-center px-2 py-1 rounded-md">
+                                            <Loader2 className="text-white text-xs animate-spin"/></button>
                                 }
                             </div>
                         }

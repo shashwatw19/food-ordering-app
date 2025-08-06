@@ -23,12 +23,12 @@ const Restaurant = () => {
                 <div className="flex flex-col md:flex-row  justify-between">
                     <div>
                         <div className="flex flex-col gap-2 my-5">
-                            <h1 className="font-medium text-xl">{restaurant?.restaurantName}</h1>
+                            <h1 className="font-medium text-xl capitalize">{restaurant?.restaurantName}</h1>
                             <div className="flex gap-2 my-2 flex-wrap gap-y-5">
                                 {
                                    restaurant?.cuisines.map((cuisine: string, idx: number) => {
                                         return <div>
-                                            <span key={idx} className="text-gray-800 font-medium bg-gray-200  rounded-md p-2">{cuisine}</span>
+                                            <span key={idx} className="text-gray-800 font-medium bg-gray-200  rounded-md p-2 capitalize">{cuisine}</span>
                                         </div>
                                     })
                                 }

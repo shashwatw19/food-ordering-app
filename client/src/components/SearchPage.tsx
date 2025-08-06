@@ -20,7 +20,7 @@ const SearchPage = () => {
 
     const handleSearch = async () => {
         const searchText = params.location!
-        console.log(searchText)
+        console.log(searchText , appliedFilter, searchQuery)
         try {
             await searchRestaurant(searchText, searchQuery, appliedFilter)
         } catch (e) {
@@ -90,7 +90,7 @@ const SearchPage = () => {
                                                     </div>
 
                                                     {/* Scrollable Content Area */} 
-                                                    <CardContent className=" overflow-y-auto flex-1 text-sm ">
+                                                    <CardContent className=" text-sm ">
                                                         <h1 className="text-lg font-semibold text-gray-900 dark:text-white truncate capitalize">
                                                             {restaurant.restaurantName}
                                                         </h1>
@@ -121,7 +121,7 @@ const SearchPage = () => {
                                                     </CardContent>
 
                                                     {/* Footer Always Visible */}
-                                                    <CardFooter className="border-t border-gray-200 dark:border-gray-700 px-4 py-3">
+                                                    <CardFooter className="border-t border-gray-200 dark:border-gray-700 px-3 py-3">
                                                         <Link
                                                             to={`/restaurant/${restaurant._id}`}
                                                             className="bg-orange-500 hover:bg-orange-400 transition-colors duration-200 text-white text-sm font-semibold px-4 py-2 rounded-full text-center w-full"

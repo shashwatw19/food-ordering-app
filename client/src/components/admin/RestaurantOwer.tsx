@@ -13,6 +13,7 @@ const RestaurantOwer = () => {
   const updateRestaurant = useRestaurantStore((state)=>state.updateRestaurant)
   const loading = useRestaurantStore((state)=>state.loading)
   const [update , setUpdate] = useState<boolean>(false)
+  const [cuisinesInput, setCuisinesInput] = useState<string>("") // Separate state for cuisine input
   const [input, setInput] = useState<RestaurantFormSchema>({
     restaurantName: "",
     city: "",
@@ -34,9 +35,10 @@ const RestaurantOwer = () => {
          return
     }
        
+  console.log("input from cuisines array" , input.cuisines)
 
     // api implementation here
-    console.log(input )
+   
     try{
       const formData = new FormData()
       formData.append("restaurantName" , input.restaurantName)
@@ -60,7 +62,7 @@ const RestaurantOwer = () => {
             setUpdate(true)
           }
       }
-      console.log("input formData " , formData.keys)
+      
     }catch(e){
       console.log("error in restaurant component" , e)
     }
@@ -73,6 +75,7 @@ const RestaurantOwer = () => {
       address: "",
       images: undefined
     })
+    setCuisinesInput("") // Clear the cuisines input field
   }
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
 
@@ -84,22 +87,26 @@ const RestaurantOwer = () => {
     const fetchRestaurant = async () => {
       await getRestaurant();
       if(restaurant){
+        const cuisinesArray = Array.isArray(restaurant.cuisines) 
+          ? restaurant.cuisines.map((cuisine: string) => cuisine.trim())
+          : [];
+        
         setInput({
           restaurantName: restaurant.restaurantName || "",
           city: restaurant.city || "",
           country: restaurant.country || "",
           deliveryTime: restaurant.deliveryTime || 0,
-          cuisines: restaurant.cuisines
-            ? restaurant.cuisines.map((cuisine: string) => cuisine.trim())
-            : [],
+          cuisines: cuisinesArray,
           images : undefined,
-          address : restaurant.address
+          address : restaurant.address || ""
         });
+        
+        // Set the cuisines input field with the joined string
+        setCuisinesInput(cuisinesArray.join(", "));
       };
       setUpdate(false)
     }
     fetchRestaurant();
-    console.log("Restaurant " , restaurant);
   },[update])
   return (
     <div className="max-w-6xl mx-auto my-10 p-4">
@@ -143,8 +150,21 @@ const RestaurantOwer = () => {
               </div>
               <div className="flex flex-col relative gap-2 p-2">
                 <Label className="text-gray-800 font-medium">Cuisines</Label>
-                <Input type="text" name="cuisines" className="pl-9" placeholder="e.g. Pizza,Momos,Pasta..."  value={input.cuisines}
-                  onChange={(e) =>setInput({ ...input, cuisines: e.target.value.split(" ,") })}   
+                <Input 
+                  type="text" 
+                  name="cuisines" 
+                  className="pl-9" 
+                  placeholder="e.g. Kadhai Paneer, Butter Chicken, Pasta..."  
+                  value={cuisinesInput}
+                  onChange={(e) => {
+                    setCuisinesInput(e.target.value);
+                    // Update the cuisines array in real-time
+                    const cuisinesArray = e.target.value
+                      .split(",")
+                      .map(item => item.trim())
+                      .filter(item => item.length > 0);
+                    setInput({ ...input, cuisines: cuisinesArray });
+                  }}   
                  />
                 <HandPlatter className="absolute inset-y-12 left-3 text-gray-600  ml-1 " size={20} />
                  {
