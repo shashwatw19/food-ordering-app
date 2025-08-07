@@ -164,7 +164,6 @@ const NoResultFound = ({ searchText }: { searchText: string }) => {
         </div>
     );
 };
-
 export default SearchPage
 
 

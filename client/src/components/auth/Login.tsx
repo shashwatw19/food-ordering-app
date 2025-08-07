@@ -52,7 +52,7 @@ const Login = () => {
     return (
         <div className="flex justify-center items-center h-screen w-screen">
             <form onSubmit={submitHandler} className="md:p-8 w-full max-w-md p-4 border-gray-200 rounded-lg  flex flex-col gap-2">
-                <h1 className="text-center font-bold">APP NAME</h1>
+                <h1 className="text-2xl text-center  font-extrabold bg-gradient-to-r from-orange-600 to-yellow-400 bg-clip-text text-transparent">FlavorTrail.</h1>
                 <div className="relative">
                     <Input placeholder="Email" onChange={changeHandler} type="email" name="email" value={input.email} className="pl-10 focus-visible:ring-0" />
                     <Mail className="absolute inset-y-2 left-2 pointer-events-none text-gray-500" />
