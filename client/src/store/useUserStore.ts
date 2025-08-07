@@ -3,7 +3,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { finalSignInState, UserState } from "../types/userType";
 import { LoginInputState, SignupInputState } from "../schema/userSchema";
 import { toast } from "sonner";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { User } from "../apis";
 import { useCartStore } from "./useCartStore";
 import { UpdateUserProfile } from "../types/updateUserProfile";

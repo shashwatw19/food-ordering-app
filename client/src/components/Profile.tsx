@@ -1,7 +1,7 @@
 
 import React, { useRef, useState } from "react";
-import { Avatar , AvatarFallback , AvatarImage } from "./ui/avatar";
-import { Loader2, LocateIcon, Mail, MapPin, MapPinnedIcon, PhoneIcon, Plus, User2 } from "lucide-react";
+import { Avatar  } from "./ui/avatar";
+import { Loader2, LocateIcon, Mail, MapPin, PhoneIcon, Plus, } from "lucide-react";
 import { Input } from "./ui/input";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { Button } from "./ui/button";

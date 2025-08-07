@@ -1,6 +1,6 @@
 import { Label } from "@radix-ui/react-menubar"
 import { Input } from "../ui/input"
-import { Clock10Icon, ForkKnifeCrossed, Globe2, GlobeIcon, HandPlatter, HomeIcon, HotelIcon, Image, Loader2 } from "lucide-react"
+import { Clock10Icon, ForkKnifeCrossed, GlobeIcon, HandPlatter, HomeIcon, HotelIcon, Image, Loader2 } from "lucide-react"
 import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { RestaurantFormSchema, restaurantFromSchema } from "../../schema/restaurantFormSchema"
 import { useRestaurantStore } from "../../store/useRestaurantStore"

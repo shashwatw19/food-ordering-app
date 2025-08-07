@@ -7,7 +7,8 @@ import { Loader2 } from "lucide-react";
 function ForgotPassword() {
     
     const [email , setEmail] = useState<string>("")
-    const [loading , setLoading] = useState<boolean>(false)
+    // const [loading , setLoading] = useState<boolean>(false)
+    const loading = false
     const changeHandler = (e:ChangeEvent<HTMLInputElement>)=>{
         setEmail(e.target.value)
     }

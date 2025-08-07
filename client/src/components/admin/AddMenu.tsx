@@ -38,17 +38,7 @@ const AddMenu = () => {
         const { name, value, type } = e.target
         setMenu({ ...menu, [name]: type == "number" ? Number(value) : value })
     }
-    const handleEditMenu = ( menu : MenuItem)=>{
-        console.log("menu item selected " , menu)
-        setSelectedMenu({
-            name : menu.name,
-            description : menu.description,
-            _id : menu._id,
-            imageUrl : menu.imageUrl,
-            price : menu.price
-        })
-        setEditOpen(true)
-    }
+    
     const submitHandler = async(e: FormEvent) => {
         e.preventDefault()
         const result = menuFromSchema.safeParse(menu)
@@ -184,7 +174,7 @@ const AddMenu = () => {
 
                 {/* edit pop-up */}
                 <div>
-                  {editOpen && <EditMenu setUpdateMenu={setUpdateMenu} selectedMenu={selectedMenu}  setSelectedMenu={setSelectedMenu} editOpen={editOpen} setEditOpen = {setEditOpen}/>}   
+                  {editOpen && <EditMenu setUpdateMenu={setUpdateMenu} selectedMenu={selectedMenu} editOpen={editOpen} setEditOpen = {setEditOpen}/>}   
                 </div>
             </div>
         </div>

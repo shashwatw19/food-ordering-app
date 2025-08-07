@@ -8,7 +8,7 @@ import { useState } from "react"
 import { MenuItem } from "../../types/restaurantType"
 import { useMenuStore } from "../../store/useMenuStore"
 
-const EditMenu = ({ editOpen , selectedMenu , setSelectedMenu , setEditOpen , setUpdateMenu }: { editOpen: boolean, selectedMenu : MenuItem ,  setSelectedMenu: Dispatch<SetStateAction<MenuItem>>  , setEditOpen : Dispatch<SetStateAction<boolean>> , setUpdateMenu : Dispatch<SetStateAction<boolean>> }) => {
+const EditMenu = ({ editOpen , selectedMenu ,setEditOpen , setUpdateMenu }: { editOpen: boolean, selectedMenu : MenuItem   , setEditOpen : Dispatch<SetStateAction<boolean>> , setUpdateMenu : Dispatch<SetStateAction<boolean>> }) => {
     const [menu, setMenu] = useState<MenuFormSchema>({
         name: "",
         description: "",
