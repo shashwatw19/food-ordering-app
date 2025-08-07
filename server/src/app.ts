@@ -6,7 +6,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-    origin:  'http://localhost:5173',
+    origin: process.env.ORIGIN || 'http://localhost:5173',
     credentials : true
 }));
 
@@ -16,7 +16,9 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
 
-app.get('/api/v1' , (req ,res )=>{res.send('Heelo mf!!')})
+app.get('/api/v1' , (req: Request, res: Response) => {
+    res.send('Food Ordering API is running!')
+})
 
 import userRouter from '../src/routes/user.routes'
 import restaurantRouter from '../src/routes/restaurant.routes'
