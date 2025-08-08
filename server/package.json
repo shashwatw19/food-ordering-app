@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "npm i && tsc -b ",
+   "build": "rm -rf dist && npm i && tsc",
     "start": "node dist/index.js"
   },
   "keywords": [],
