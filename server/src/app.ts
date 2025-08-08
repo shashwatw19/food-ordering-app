@@ -2,6 +2,11 @@ import express, { Request, Response, NextFunction } from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
+import userRouter from './routes/user.routes'
+import restaurantRouter from './routes/restaurant.routes'
+import menuRouter from './routes/menu.routes'
+import paymentRouter from './routes/payments.routes'
+import orderRouter from './routes/order.routes'
 dotenv.config()
 
 const app = express()
@@ -20,12 +25,6 @@ app.use(cookieParser())
 app.get('/api/v1', (req: Request, res: Response) => {
   res.send('Food Ordering API is running!')
 })
-
-import userRouter from './routes/user.routes.js'
-import restaurantRouter from './routes/restaurant.routes.js'
-import menuRouter from './routes/menu.routes.js'
-import paymentRouter from './routes/payments.routes.js'
-import orderRouter from './routes/order.routes.js'
 
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/restaurant', restaurantRouter)
