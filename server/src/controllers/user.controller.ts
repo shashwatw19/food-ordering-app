@@ -81,7 +81,8 @@ const signin = asyncHandler(async(req : Request, res : Response)=>{
 
      const options = {
         httpOnly : true,
-        secure : true
+        secure : true,
+        maxAge: 604800000
     }
 
     validUser.refreshToken = undefined
