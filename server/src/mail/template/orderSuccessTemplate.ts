@@ -1,17 +1,19 @@
-import { DeliveryDetails , CartDetails } from "../../models/order.model";
+import { DeliveryDetails, CartItems } from '../../models/order.model'
 
 export const orderSuccessTemplate = (
   deliveryDetails: DeliveryDetails,
-  cartDetails: CartDetails[]
+  cartDetails: CartItems[]
 ): string => {
-  const { fullname, address, city, email } = deliveryDetails;
+  const { fullname, address, city, email } = deliveryDetails
 
   const cartItemsHTML = cartDetails
     .map(
       (item) => `
       <tr style="border-bottom: 1px solid #ddd;">
         <td style="padding: 10px;">
-          <img src="${item.imageUrl}" alt="${item.name}" width="60" height="60" style="border-radius: 8px;" />
+          <img src="${item.imageUrl}" alt="${
+        item.name
+      }" width="60" height="60" style="border-radius: 8px;" />
         </td>
         <td style="padding: 10px; text-align: left;">
           <div style="font-weight: bold;">${item.name}</div>
@@ -22,12 +24,12 @@ export const orderSuccessTemplate = (
         </td>
       </tr>`
     )
-    .join("");
+    .join('')
 
   const totalPrice = cartDetails.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
-  );
+  )
 
   return `<!DOCTYPE html>
 <html>
@@ -117,5 +119,5 @@ export const orderSuccessTemplate = (
       </div>
     </div>
   </body>
-</html>`;
-};
+</html>`
+}
