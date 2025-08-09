@@ -48,7 +48,7 @@ const SearchPage = () => {
 
 
                     </div>
-                    <div className="flex flex-col md:flex-row gap-5  md:items-baseline justify-between">
+                    <div className="flex flex-col md:flex-row gap-5 md:items-baseline justify-between">
                         {
                             searchedRestaurant?.length && searchedRestaurant?.length > 0 ? <h1 className="text-black font-bold text-xl">({searchedRestaurant?.length}) Results found </h1> : <></>
                         }
@@ -72,10 +72,10 @@ const SearchPage = () => {
                         <>
                             {
                                 !loading && searchedRestaurant?.length == 0 ? (<NoResultFound searchText={params.location!} />) :
-                                    <div className="flex flex-row items-center gap-5 flex-wrap">
+                                    <div  className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 w-full">
                                         {searchedRestaurant && searchedRestaurant.map((restaurant) => {
                                             return <div>
-                                                <Card className="bg-white dark:bg-gray-900 shadow-lg hover:shadow-xl transition-shadow duration-300 w-[280px] h-[420px] rounded-2xl overflow-hidden flex flex-col justify-between border border-gray-100 dark:border-gray-800">
+                                                <Card className="bg-white dark:bg-gray-900 shadow-lg hover:shadow-xl transition-shadow duration-300 w-[280px] h-[420px] rounded-2xl overflow-hidden mx-auto flex flex-col justify-between border border-gray-100 dark:border-gray-800">
 
                                                     {/* Image Section */}
                                                     <div className="relative">

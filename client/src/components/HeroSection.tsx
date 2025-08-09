@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import JoinWithUsPage from "./JoinWithUs"
 import AvailabilityPage from "./AvailabilityPage"
 import thali from "../assets/thali.jpg"
+import { toast } from "sonner"
 const HeroSection = () => {
     const [searchResults , setSearchResults] = React.useState<string>("");
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,7 +25,15 @@ const HeroSection = () => {
                     <Input placeholder="Enter your location to search restaurants nearby you" className="pl-10 capitalize  rounded-md shadow-lg text-gray-600 " type="text" value={searchResults }  onChange={handleSearch}/>
                     <Search className="absolute inset-y-2 left-2 text-gray-600"/>
                 </div>
-                <button onClick={()=>navigate( `/search/${searchResults}`)} className="bg-gradient-to-br from-orange-300 to-orange-600 text-white font-semibold px-2 py-1 rounded-md ">Search</button>
+                <button onClick={()=>{
+                    if(searchResults.trim() === ""){
+                        toast.info('Enter a valid city name!')
+                    }
+                    else{
+                        navigate( `/search/${searchResults}`)
+                    }
+                 
+                }} className="bg-gradient-to-br from-orange-300 to-orange-600 text-white font-semibold px-2 py-1 rounded-md ">Search</button>
                 
             </div>
           

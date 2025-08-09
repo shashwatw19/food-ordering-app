@@ -28,8 +28,8 @@ useEffect(()=>{
         </button>
       </div>
     ) : (
-      <div className="min-h-screen p-6 flex justify-center bg-gray-white dark:bg-gray-900">
-        <div className="w-full max-w-5xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 space-y-8">
+      <div className="min-h-screen p-6 flex justify-center bg-gray-white dark:bg-gray-900 ">
+        <div className="w-full max-w-5xl bg-white dark:bg-gray-800 rounded-lg p-6 space-y-8">
           <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 text-center">
             Order Summary
           </h2>
@@ -37,11 +37,15 @@ useEffect(()=>{
           {order.map((cartForOrder, index) => (
             <div
               key={index}
-              className=" rounded-lg p-4 "
+              className="p-4  bg-gray-100 rounded-2xl border-gray-300"
             >
               <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">
                 Order Status:{" "}
-                <span className="text-orange-500">{cartForOrder.status.toUpperCase()}</span>
+                <span className="text-orange-500 capitalize">{cartForOrder.status}</span>
+              </h3>
+              <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                Total Amount:{" "}
+                <span className="text-gray-600">₹{cartForOrder.totalAmount}</span>
               </h3>
               <div className="flex flex-col gap-1 ">
                   <p className="text-lg font-semibold text-gray-700">Restaurant</p>
@@ -62,10 +66,11 @@ useEffect(()=>{
                       alt={item.name}
                       className="w-full h-28 object-cover rounded-md mb-2"
                     />
-                    <h4 className="text-gray-800 dark:text-gray-200 font-semibold capitalize">
-                      {item.name}
-                    </h4>
-                    <p className="text-gray-500 dark:text-gray-400">₹{item.price.toString()}</p>
+                    <div className="flex flex-row items-center justify-between  w-full">
+                      <p className="text-gray-800 dark:text-gray-200 font-semibold capitalize"> {item.name}</p> 
+                      <p className="font-medium text-gray-600 ">x{item.quantity}</p>
+                    </div>
+                    <p className="text-gray-500 dark:text-gray-600">₹{item.price.toString()}</p>
                   </div>
                 ))}
               </div>

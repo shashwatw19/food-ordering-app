@@ -48,6 +48,10 @@ const OrderConfirmationPage = ({ open, setOpen }: OrderConfirmationProps) => {
 	const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		// api implementation 
+		if(input.address.trim() == 'Update your address' || input.city.trim() == 'update your city'){
+			toast.info('Update your address and city to continue...')
+			return;
+		}
 		const checkoutSessionData: CheckoutSessionRequest = {
 			cartItems: cart,
 			DeliveryDetails: input,

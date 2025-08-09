@@ -1,4 +1,4 @@
-const BASE_URL : string = import.meta.env.VITE_BASE_URL! || 'http://localhost:8000/api/v2'
+const BASE_URL : string = import.meta.env.VITE_BASE_URL! 
 
 export const User =  {
     SIGNUP : BASE_URL + '/user/signup',

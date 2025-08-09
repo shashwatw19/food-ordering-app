@@ -36,6 +36,14 @@ const Cart = () => {
         console.log("open state" , open)
         
     }
+    if(cart.length == 0 ){
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[300px]">
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">Your cart is empty</h2>
+                <p className="text-gray-500 mb-4">Add some delicious food to your cart to get started!</p>
+            </div>
+        );
+    }
     return <div className="flex flex-col max-w-7xl min-h-screen my-10 p-4 mx-auto">
         <div className="flex flex-row justify-end ">
             <button className="bg-gray-300 px-3 py-1 text-gray-800 rounded-md font-medium " onClick={() => resetCart()}>Clear</button>

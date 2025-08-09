@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import { Menubar, MenubarMenu, MenubarTrigger, MenubarContent } from "./ui/menubar"
 import { useState } from "react"
 import { MenubarItem, Separator } from "@radix-ui/react-menubar"
-import {  ShoppingCart, Loader2, Menu, User, HandPlatter, ForkKnifeCrossed, SquareMenu, PackageCheck, HomeIcon, LucideHandshake } from "lucide-react"
+import {  ShoppingCart, Loader2, Menu, User, HandPlatter, ForkKnifeCrossed, SquareMenu, PackageCheck, HomeIcon, LucideHandshake, FlashlightIcon, BikeIcon } from "lucide-react"
 import { Button } from "./ui/button"
 import userImage from "../assets/user.png"
 import {
@@ -97,9 +97,11 @@ const Navbar = () => {
                         }
 
                         {
-                            user && isAuthenticated && <div className="w-[30px]">
+                            user && isAuthenticated && <Link to={"/profile"}>
+                                <div className="w-[30px]">
                                 <img src={user.avatarImage || userImage}  className="w-[30px] h-[30px] rounded-full"/>
                             </div>
+                            </Link>
                         }
 
                         {
@@ -151,7 +153,7 @@ const MobileNavbar = () => {
                 </SheetTrigger>
                 <SheetContent>
                     <SheetHeader className="flex flex-row justify-between mt-6">
-                        <SheetTitle className="text-black text-xl">AppName</SheetTitle>
+                        <SheetTitle className="text-2xl text-center  font-extrabold bg-gradient-to-r from-orange-600 to-yellow-400 bg-clip-text text-transparent">Flavortrail</SheetTitle>
 
                     </SheetHeader>
                     <Separator className="my-2"></Separator>
@@ -186,6 +188,13 @@ const MobileNavbar = () => {
                             <Link to={"/order/success"}  onClick={() => setOpen(false)} className="flex flex-row gap-4 items-center rounded-md p-2 hover:bg-gray-200 text-gray-800 text-md">
                                 <HandPlatter />
                                 <span>Order</span>
+                            </Link>
+                        }
+                        {
+                            user && isAuthenticated &&
+                            <Link to={"/order/delivered"}  onClick={() => setOpen(false)} className="flex flex-row gap-4 items-center rounded-md p-2 hover:bg-gray-200 text-gray-800 text-md">
+                                <BikeIcon/>
+                                <span>Delivered</span>
                             </Link>
                         }
                          {

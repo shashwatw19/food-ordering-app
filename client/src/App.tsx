@@ -19,6 +19,7 @@ import { useEffect } from "react"
 import JoinWithUs from "./components/JoinWithUs"
 import CityFoodCulture from "./components/CityFoodCulture" 
 import DeliveredOrdersPage from "./DeliveredOrdersPage"
+import NotFound from "./components/NotFound"
 const ProtectedRoutes = ({ children }: { children: React.ReactNode }) => {
 
   const isAuthenticated = useUserStore((state) => state.isAuthenticated)
@@ -140,7 +141,12 @@ function App() {
     {
       path : '/cities',
       element : <CityFoodCulture/>
+    },
+    {
+      path: '*',
+      element: <NotFound />
     }
+    
 
   ])
   const checkAuth = useUserStore((state)=>state.checkAuth)
