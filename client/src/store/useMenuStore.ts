@@ -7,7 +7,7 @@ import { toast } from 'sonner'
 import axios from 'axios'
 import { Restaurants } from '../apis'
 import { useRestaurantStore } from './useRestaurantStore'
-
+axios.defaults.withCredentials = true;
 const useMenuStore = create<menuState>()(
     persist((set )=>({
     loading : false,

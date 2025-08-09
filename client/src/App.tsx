@@ -146,7 +146,7 @@ function App() {
   const checkAuth = useUserStore((state)=>state.checkAuth)
   useEffect(()=>{ 
       checkAuth()
-  },[checkAuth])
+  },[])
   return (
     <>
       <RouterProvider router={appRouter} />

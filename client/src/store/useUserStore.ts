@@ -9,6 +9,7 @@ import { useCartStore } from "./useCartStore";
 import { UpdateUserProfile } from "../types/updateUserProfile";
 import { useRestaurantStore } from "./useRestaurantStore";
 import { useOrderStore } from "./useOrderStore";
+axios.defaults.withCredentials = true;
 const useUserStore = create<UserState>()(
   persist(
     (set) => ({
