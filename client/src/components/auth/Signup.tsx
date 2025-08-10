@@ -33,9 +33,7 @@ const Signup = () => {
             setError(fieldError as Partial<SignupInputState>)
             return;
         }
-
-
-        const response = await createOtp(input?.email);
+    const response = await createOtp(input?.email);
         if (response) {
             setFormData(input)
             setShowVerification(true)
@@ -56,7 +54,15 @@ const Signup = () => {
     }
     
     if(showVerification)
-        return <VerifyEmail onVerificationComplete={()=>navigate('/login')}/>
+        return <VerifyEmail onVerificationComplete={()=>{
+            navigate('/login')
+            setFormData({
+                email: "",
+                password: "",
+                fullname: "",
+                contact: ""
+            })
+        }}/>
 
     return (
         <div className="flex justify-center items-center h-screen w-screen">

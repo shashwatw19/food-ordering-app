@@ -18,9 +18,10 @@ const mailSender = async(email : string , title : string , body : string) =>{
             subject : title,
             html : body
         });
-        console.log("Message sent : " , info.messageId)
+        console.log("Message sent : " , info.envelope)
     }catch(err){
         console.log('Error while sending mail ' , err)
+        throw err
     }
 }
 

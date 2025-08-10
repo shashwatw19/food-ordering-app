@@ -31,7 +31,7 @@ const generateAccessAndRefreshToken = async (
 //signup
 const signup = asyncHandler(async (req: Request, res: Response) => {
   const { fullname, email, password, contact, otp } = req.body
-  console.log(req.body)
+  
   if ([fullname, email, password].some((field) => field?.trim() === ''))
     throw new ApiError(400, 'All fields are required')
 
@@ -142,7 +142,7 @@ const resetPassword = asyncHandler(async (req: Request, res: Response) => {
 // updateProfile
 const updateProfile = asyncHandler(async (req: Request, res: Response) => {
   const _id = req.user?._id
-  console.log(_id, 'USER IDs')
+  // console.log(_id, 'USER IDs')
   const user = await User.findById(_id)
 
   if (!user) {
@@ -221,6 +221,21 @@ const logout = asyncHandler(async (req, res) => {
       })
     )
 })
+const healthCheck = asyncHandler(async (req: Request, res: Response) => {
+  const healthStatus = {
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    uptime: Math.floor(process.uptime()),
+    message: 'FlavorTrail API is running smoothly!',
+    version: process.env.npm_package_version || '1.0.0',
+    environment: process.env.NODE_ENV || 'development'
+  };
+
+  return res.status(200).json({
+    success: true,
+    data: healthStatus
+  });
+});
 
 export {
   signup,
@@ -230,4 +245,5 @@ export {
   resetPassword,
   checkAuth,
   logout,
+  healthCheck
 }

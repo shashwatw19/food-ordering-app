@@ -46,6 +46,7 @@ const VerifyEmail = ({ onVerificationComplete }: VerificationEmailProps) => {
         try {
             if (response) {
                 onVerificationComplete()
+                
             }
         }
         catch (e) {

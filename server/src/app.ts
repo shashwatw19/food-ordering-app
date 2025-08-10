@@ -7,6 +7,7 @@ import restaurantRouter from './routes/restaurant.routes'
 import menuRouter from './routes/menu.routes'
 import paymentRouter from './routes/payments.routes'
 import orderRouter from './routes/order.routes'
+
 dotenv.config()
 
 const app = express()
@@ -22,6 +23,21 @@ app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
+app.get('/api/v1/health', (req: Request, res: Response) => {
+  const healthStatus = {
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    uptime: Math.floor(process.uptime()),
+    message: 'FlavorTrail API is running smoothly!',
+    version: '1.0.0',
+    environment: process.env.NODE_ENV || 'development'
+  };
+
+  res.status(200).json({
+    success: true,
+    data: healthStatus
+  });
+});
 app.get('/api/v1', (req: Request, res: Response) => {
   res.send('Food Ordering API is running!')
 })

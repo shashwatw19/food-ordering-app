@@ -21,7 +21,7 @@ declare global {
 const verifyJwt = asyncHandler(async(req: Request, res: Response, next: NextFunction) => {
     try {
         const token = req.cookies?.verificationToken 
-        console.log("token :",token)
+        // console.log("token :",token)
         if(!token) {
             throw new ApiError(401, 'Unauthorized request');
         }

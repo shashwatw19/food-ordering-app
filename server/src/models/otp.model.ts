@@ -35,13 +35,13 @@ const sendVerificationMail = async(email : string , otp : string) : Promise<void
         console.log('verification mail sent successfully');
 
     }catch(err){
-        console.log('error while sending verification mail')
+        console.log('error while sending verification mail' , err)
     }
 }
 
 otpSchema.pre('save' , async function (next){
     if(this.isNew){
-        console.log(this.otp)
+        console.log(this.otp , this.email)
         await sendVerificationMail(this.email ,emailVerficationTemplate(this.otp) )
     }
 

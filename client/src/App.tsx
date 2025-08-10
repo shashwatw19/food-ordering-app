@@ -20,6 +20,7 @@ import JoinWithUs from "./components/JoinWithUs"
 import CityFoodCulture from "./components/CityFoodCulture" 
 import DeliveredOrdersPage from "./DeliveredOrdersPage"
 import NotFound from "./components/NotFound"
+import { healthPingService } from "./healthCheck"
 const ProtectedRoutes = ({ children }: { children: React.ReactNode }) => {
 
   const isAuthenticated = useUserStore((state) => state.isAuthenticated)
@@ -152,6 +153,12 @@ function App() {
   const checkAuth = useUserStore((state)=>state.checkAuth)
   useEffect(()=>{ 
       checkAuth()
+      healthPingService.start()
+
+       return () => {
+      healthPingService.stop()
+    }
+
   },[])
   return (
     <>
