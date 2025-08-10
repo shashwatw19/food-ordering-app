@@ -202,9 +202,13 @@ const logout = asyncHandler(async (req, res) => {
     }
   )
 
+  // Fixed cookie options - must match the options used when setting cookies
   const options = {
     httpOnly: true,
     secure: true,
+    maxAge: 0, 
+    sameSite: 'none' as const, 
+    path: '/', 
   }
 
   if (!logOutUser) {
@@ -212,7 +216,7 @@ const logout = asyncHandler(async (req, res) => {
   }
 
   return res
-    .status(201)
+    .status(200) // Changed from 201 to 200 for logout
     .clearCookie('verificationToken', options)
     .clearCookie('refreshToken', options)
     .json(

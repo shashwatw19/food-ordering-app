@@ -224,8 +224,6 @@ const useUserStore = create<UserState>()(
               message : errorMessage,
               error : e
             })
-
-            
           }
           return false
         }finally{
