@@ -51,7 +51,7 @@ const useRestaurantStore = create<RestaurantState>()(
         }
       },
       getRestaurant: async () => {
-        const toastId = toast.loading('loading...')
+       
         try{
           const response = await axios.get(Restaurants.GET_RESTAURANT)
           // console.log("response from get API" , response)
@@ -60,7 +60,7 @@ const useRestaurantStore = create<RestaurantState>()(
             set({restaurant : null})
             return false
           }
-          toast.success('restaurant found')
+          // toast.success('restaurant found')
           console.log(response.data.data)
           set({restaurant : response.data.data})
           return true
@@ -73,7 +73,7 @@ const useRestaurantStore = create<RestaurantState>()(
           return false
         }finally{
           set({loading : false})
-          toast.dismiss(toastId)
+          
         }
       },
       updateRestaurant: async (formData: FormData) => {
@@ -107,7 +107,7 @@ const useRestaurantStore = create<RestaurantState>()(
       },
       // search restaurant with filters
       searchRestaurant: async (searchText: string,searchQuery: string,selectedCuisines: any)=>{
-        const toastId = toast.loading('loading...')
+        
         try{
             
             set({loading : true});
@@ -116,7 +116,7 @@ const useRestaurantStore = create<RestaurantState>()(
             params.set("selectedCuisines" , selectedCuisines.join(","))
             
             const response = await axios.get(`${Restaurants.SEARCH}/${searchText}?${params.toString()}`)
-            toast.success(response.data.message)
+            // toast.success(response.data.message)
             console.log("response from search restaurants " , response.data.data)
             set({searchedRestaurant : response.data.data})
             return true
@@ -129,16 +129,16 @@ const useRestaurantStore = create<RestaurantState>()(
             return false
         }finally{
             set({loading : false})
-            toast.dismiss(toastId)
+           
         }
  
       },
       getRestaurantMenu : async()=>{
-          const toastId = toast.loading('success')
+          // const toastId = toast.loading('success')
           try{
             const response = await axios.get(Restaurants.GET_MENU)
             console.log("response from get Menu  " ,response)
-            toast.success(response.data.message)
+            // toast.success(response.data.message)
             const menu = response.data.data.menu
             set(state => ({
               restaurant: state.restaurant ? { ...state.restaurant, menu: menu } : null,
@@ -153,7 +153,7 @@ const useRestaurantStore = create<RestaurantState>()(
             return false
           }finally{
             set({loading : false})
-            toast.dismiss(toastId)
+            // toast.dismiss(toastId)
           }
           
       },
@@ -192,12 +192,12 @@ const useRestaurantStore = create<RestaurantState>()(
       },
       
       getSingleRestaurant: async (restaurantId: string) => {
-        const toastId = toast.loading('loading...')
+     
         try{
           set({loading : true})
           const response = await axios.get(`${Restaurants.GET_RESTAURANT}/${restaurantId}`)
           console.log("resposne from get SingleRestaurant" , response)
-          toast.success("restaurant found!!")
+          
           set({restaurant : response.data.data})
           
         }catch(e){
@@ -211,7 +211,7 @@ const useRestaurantStore = create<RestaurantState>()(
          
           set({loading : false})
         
-         toast.dismiss(toastId)
+      
         }
       },
        

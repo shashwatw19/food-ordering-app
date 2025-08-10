@@ -28,7 +28,9 @@ const Orders = () => {
             <div className="space-y-8">
                 {
                     order.length == 0 ?
-                        <div></div> :
+                        <div className="text-center text-xl text-gray-500 py-8">
+                            This restaurant currently has no active orders.
+                        </div>:
                         <div>
                             {
                                 order.map((order) => {

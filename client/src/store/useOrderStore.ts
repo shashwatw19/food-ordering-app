@@ -110,14 +110,14 @@ const useOrderStore = create<OrderState>()(
         }
       },
       findOrderForRestaurant: async () => {
-        const toastId = toast.loading('loading...')
+        
         set({loading : true})
         try{
           const response = await axios.get(ORDERS.FIND_ORDERS)
           console.log("response from findOrdersForRestaurant..." , response.data.data)
           // updating orders....
          set({order : response.data.data})
-          toast.success('Orders found..')
+          // toast.success('Orders found..')
           return false
         }catch(e){
           if(axios.isAxiosError(e)){
@@ -129,7 +129,7 @@ const useOrderStore = create<OrderState>()(
           }
           return false
         }finally{
-          toast.dismiss(toastId)
+         
           set({loading : false})
         }
         
@@ -167,8 +167,7 @@ const useOrderStore = create<OrderState>()(
         set({order : []})
       },
       getPendingOrders : async()=>{
-        const toastId = toast.loading('loading....')
-        set({loading : true})
+       
         try{
           const response = await axios.get(ORDERS.PENDING_ORDER)
           console.log("response from getPending orders" , response)
@@ -184,15 +183,15 @@ const useOrderStore = create<OrderState>()(
           }
           return false
         }finally{
-          toast.dismiss(toastId)
+          
           set({loading : false})
         }
       },
       getOrdersForUser : async()=>{
-        const toastId = toast.loading('loading...')
+       
         try{
           const response = await axios.get(ORDERS.DELIVERED_ORDERS)
-          toast.success('orders found!')
+          // toast.success('orders found!')
           console.log("response from delivered orders " , response)
           set({order : response.data.data})
           return true
@@ -209,7 +208,7 @@ const useOrderStore = create<OrderState>()(
         }
         finally{
           set({loading : false})
-          toast.dismiss(toastId)
+          
         }
        
       }

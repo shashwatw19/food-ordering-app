@@ -37,7 +37,7 @@ useEffect(()=>{
           {order.map((cartForOrder, index) => (
             <div
               key={index}
-              className="p-4  bg-gray-100 rounded-2xl border-gray-300"
+              className="p-4  bg-gray-50 rounded-2xl border-gray-300"
             >
               <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">
                 Order Status:{" "}
@@ -45,12 +45,12 @@ useEffect(()=>{
               </h3>
               <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-3">
                 Total Amount:{" "}
-                <span className="text-gray-600">₹{cartForOrder.totalAmount}</span>
+                <span className="text-gray-600">₹{Number(cartForOrder.totalAmount)/100}</span>
               </h3>
               <div className="flex flex-col gap-1 ">
-                  <p className="text-lg font-semibold text-gray-700">Restaurant</p>
+                  
                    <div className="text-gray-700 p-1">
-                    <p className="text-gray-700 font-semibold capitalize">{cartForOrder.restaurant?.restaurantName}</p>
+                    <p className="text-gray-700 font-semibold capitalize text-lg">{cartForOrder.restaurant?.restaurantName}</p>
                     <p className="">Address : <span>{cartForOrder.restaurant?.address}</span></p>
                     <p>Estimated delivery : <span>{cartForOrder.restaurant?.deliveryTime} min</span></p>
                    </div>
@@ -59,7 +59,7 @@ useEffect(()=>{
                 {cartForOrder?.cartItems?.map((item: CartItem, i: number) => (
                   <div
                     key={i}
-                    className="flex flex-col items-start white dark:bg-gray-800 rounded-md p-3 shadow-sm"
+                    className="flex flex-col items-start white bg-white rounded-md p-3 shadow-sm"
                   >
                     <img
                       src={item.imageUrl || pizza2}
