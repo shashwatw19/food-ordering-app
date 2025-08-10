@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import { Menubar, MenubarMenu, MenubarTrigger, MenubarContent } from "./ui/menubar"
 import { useState } from "react"
 import { MenubarItem, Separator } from "@radix-ui/react-menubar"
-import {  ShoppingCart, Loader2, Menu, User, HandPlatter, ForkKnifeCrossed, SquareMenu, PackageCheck, HomeIcon, LucideHandshake, FlashlightIcon, BikeIcon } from "lucide-react"
+import {  ShoppingCart, Loader2, Menu, User, HandPlatter, ForkKnifeCrossed, SquareMenu, PackageCheck, HomeIcon, LucideHandshake, BikeIcon } from "lucide-react"
 import { Button } from "./ui/button"
 import userImage from "../assets/user.png"
 import {
